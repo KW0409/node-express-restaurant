@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(
   session({
-    secret: process.env.EXPRESS_SESSION_SECRET || "secretSession",
+    secret: process.env.JAB_SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 86400000 }, // 單位是毫秒
