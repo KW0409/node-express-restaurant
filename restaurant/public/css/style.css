@@ -1,0 +1,1033 @@
+body {
+  margin: 0px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.hide {
+  display: none !important;
+}
+
+h3.error {
+  font-size: 20px;
+  color: red;
+  text-align: center;
+  margin-top: 0;
+}
+
+/* navbar */
+.navbar__wrapper {
+  box-shadow: -1.4px -1.4px 6px 0 #97a2a0;
+  background-color: #ffffff;
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+}
+
+.navbar__area {
+  max-width: 1920px;
+  height: 84px;
+  padding: 0px 45px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.just-a-bite {
+  font-family: Questrial;
+  font-size: 36px;
+  text-align: left;
+  color: #489846;
+  cursor: pointer;
+}
+
+.navbar__list {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar__list > li {
+  display: inline-block;
+  text-align: center;
+}
+
+.navbar__list > li + li {
+  margin-left: 10px;
+}
+
+.navbar__list > li > a,
+.dropdown__nav a {
+  color: #010101;
+  font-family: 微軟正黑;
+  font-size: 17px;
+  padding: 14px 25px;
+  border-radius: 8px;
+  transition: all 0.25s;
+}
+
+.navbar__list > li > a:hover,
+.dropdown__nav a:hover {
+  background: #ff7286;
+  color: #ffffff;
+}
+
+@media (max-width: 1000px) {
+  .navbar__area {
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  .just-a-bite {
+    margin-top: 25px;
+  }
+
+  .navbar__list {
+    display: flex;
+    width: 100%;
+    padding: 0;
+    margin-top: 30px;
+  }
+
+  .navbar__list > li {
+    flex: 1;
+  }
+
+  .navbar__list > li > a {
+    border-radius: 0;
+    display: block;
+  }
+
+  .navbar__list > li + li {
+    margin-left: 0px;
+  }
+}
+
+@media (max-width: 475px) {
+  .navbar__list > li > a {
+    padding: 15px 15px;
+  }
+}
+
+.navbar__list.account > a {
+  position: relative;
+}
+
+.account .dropdown__nav {
+  width: 115px;
+  padding: 0;
+  border: 1px solid rgb(62, 62, 62);
+  list-style: none;
+  position: absolute;
+  top: 65px;
+  right: 99999999px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.account:hover .dropdown__nav {
+  right: 45px;
+  opacity: 1;
+}
+
+@media (max-width: 1000px) {
+  .account:hover .dropdown__nav {
+    width: 20%;
+    top: 100%;
+    right: 0;
+  }
+}
+
+.dropdown__nav li {
+  background: #ffffff;
+  border-bottom: 1px solid rgb(62, 62, 62);
+}
+
+.dropdown__nav a {
+  display: block;
+  padding: 14px 0px;
+  border-radius: 0;
+}
+
+/* footer */
+.footer__wrapper {
+  min-height: 190px;
+  padding: 35px 106px;
+  background-color: #e8efee;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-text1 {
+  font-family: MicrosoftJhengHei;
+  font-size: 14px;
+  line-height: 2em;
+  text-align: left;
+  margin-top: 10px;
+  color: #484848;
+}
+
+.footer-text2-1 {
+  font-family: Questrial;
+  font-size: 36px;
+  text-align: right;
+  margin-right: 3px;
+  color: #489846;
+}
+
+.footer-text2-2 {
+  margin-top: 15px;
+  font-family: Questrial;
+  font-size: 14px;
+  text-align: right;
+  color: #484848;
+}
+
+@media (max-width: 680px) {
+  .footer__wrapper {
+    flex-direction: column-reverse;
+    padding: 35px;
+  }
+
+  .footer-text2 {
+    margin-bottom: 25px;
+  }
+
+  .footer-text2-1 {
+    text-align: center;
+  }
+
+  .footer-text2-2 {
+    text-align: center;
+  }
+}
+
+.copyright__wrapper {
+  min-height: 48px;
+  background-color: #35564b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 30px;
+}
+
+.copyright-text {
+  font-family: 微軟正黑;
+  font-size: 16px;
+  text-align: center;
+  color: white;
+}
+
+@media (max-width: 760px) {
+  .copyright-text {
+    font-size: 13px;
+  }
+}
+
+/* index */
+.bg__pic-wrapper {
+  width: 100%;
+  position: relative;
+  text-align: center;
+}
+
+.bg__pic-wrapper.index::after {
+  /* 此為圖片的遮罩 */
+  /* 要記得使用 ::after 一定要有 content，且至少要有空字串(如下)才會起作用 */
+  content: "";
+  background: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.bg__pic-wrapper.index img {
+  width: 100%;
+  height: 580px;
+  object-fit: cover;
+  /* cover: 可以保持圖片大小並裁剪至適合的大小中 */
+  /* 還能用 object-position 來做到跟 background-position 一樣的效果，
+    預設是 object-position: 50% 50%，也就是置中 */
+  display: flex;
+}
+
+.bg__pic-wrapper.index span {
+  font-family: 微軟正黑;
+  font-size: 60px;
+  font-weight: bold;
+  white-space: nowrap;
+  /* 不使用 z-index 的話，字體也會被遮罩，且 z-index 對 position: static 的元素沒有作用 */
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  z-index: 1;
+}
+
+@media (max-width: 780px) {
+  .bg__pic-wrapper img {
+    height: 350px;
+  }
+
+  .bg__pic-wrapper.index span {
+    font-size: 50px;
+  }
+}
+
+.wrapper {
+  max-width: 1920px;
+  margin: 0 auto;
+  margin-top: 79px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  display: flex;
+  margin-bottom: 35px;
+}
+
+.title__mark {
+  width: 15px;
+  height: 38px;
+  margin-top: 6px;
+  background: #a3dea2;
+  display: inline-flex;
+}
+
+.title__text {
+  font-family: 微軟正黑;
+  font-size: 36px;
+  font-weight: bold;
+  line-height: normal;
+  color: #000000;
+  margin-left: 17px;
+}
+
+.info__wrapper .description {
+  padding: 0 15px;
+  font-family: 微軟正黑;
+  font-size: 18px;
+  line-height: 40px;
+  text-align: center;
+  color: #000000;
+  box-sizing: border-box;
+}
+
+.selector {
+  max-width: 1920px;
+  min-height: 160px;
+  display: flex;
+  justify-content: center;
+  margin-top: 84px;
+}
+
+.selector__link {
+  width: 300px;
+  height: 160px;
+  border-radius: 10px;
+  color: #0000009c;
+  font-size: 36px;
+  text-align: center;
+  line-height: 160px;
+  transition: all 0.1s;
+}
+
+.selector__link:hover {
+  background: white;
+  line-height: 150px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.order__link {
+  margin-right: 23px;
+  background-color: #a8e8e1;
+}
+
+.order__link:hover {
+  border: 5px solid #58a9a0;
+}
+
+.search__link {
+  background-color: #f9f9b5;
+}
+
+.search__link:hover {
+  border: 5px solid #c9c94c;
+}
+
+@media (max-width: 680px) {
+  .selector {
+    flex-direction: column;
+  }
+
+  .selector__link {
+    margin: 0;
+  }
+
+  .selector__link + .selector__link {
+    margin-top: 25px;
+  }
+}
+
+.menu__wrapper {
+  margin-top: 120px;
+}
+
+.title__text.menu {
+  font-weight: normal;
+}
+
+.menu__pic-area {
+  display: flex;
+  width: 100%;
+}
+
+.menu__pic {
+  width: 25%;
+}
+
+@media (max-width: 800px) {
+  .menu__pic-area {
+    flex-direction: column;
+  }
+
+  .menu__pic-area img {
+    width: 100%;
+  }
+}
+
+.discuss__wrapper {
+  margin-top: 82px;
+}
+
+.title.discuss {
+  margin-bottom: 95px;
+}
+
+.discuss-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 25px;
+}
+
+.discuss__square {
+  width: 30%;
+  height: 205px;
+  border-radius: 5px;
+  box-shadow: -1.4px -1.4px 4px 0 #d8eaef;
+  border: solid 1px #c7e5ec;
+  background-color: white;
+  padding: 93px 19px 39px 24px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.discuss__square + .discuss__square {
+  margin-left: 16px;
+}
+
+.square__avatar {
+  max-width: 106px;
+  max-height: 106px;
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: solid 1px #c1c1c1a0;
+  border-radius: 50%;
+}
+
+.square__avatar-name {
+  font-family: MicrosoftJhengHei;
+  font-size: 16px;
+  letter-spacing: 0.14px;
+  color: #000000;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 6px;
+}
+
+.square__text {
+  font-family: 微軟正黑;
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: 0.14px;
+  text-align: center;
+  color: #000000;
+}
+
+@media (max-width: 1200px) {
+  .discuss__square {
+    height: 235px;
+  }
+}
+
+@media (max-width: 920px) {
+  .discuss-area {
+    flex-direction: column;
+  }
+
+  .discuss__square {
+    width: 100%;
+    height: 210px;
+  }
+
+  .discuss__square + .discuss__square {
+    margin-left: 0;
+    margin-top: 110px;
+  }
+}
+
+.address__wrapper {
+  margin-top: 89px;
+}
+
+.map__area {
+  margin-bottom: 43px;
+  padding: 0px 95px;
+  box-sizing: border-box;
+}
+
+.google__map-iframe {
+  width: 100%;
+  height: 450px;
+}
+
+@media (max-width: 1000px) {
+  .map__area {
+    padding: 0px 50px;
+  }
+}
+
+@media (max-width: 450px) {
+  .map__area {
+    padding: 0px 20px;
+  }
+
+  .google__map-iframe {
+    height: 250px;
+  }
+}
+
+/* FAQ */
+.faq__wrapper {
+  min-height: calc(100vh - 300px);
+  margin-bottom: 150px;
+  margin-top: 75px;
+}
+
+.title.faq {
+  margin-bottom: 40px;
+}
+
+@media (max-width: 500px) {
+  .title__mark.faq {
+    width: 12px;
+    height: 30px;
+  }
+
+  .title__text.faq {
+    font-size: 30px;
+    margin-left: 12px;
+  }
+}
+
+.question__area {
+  width: 70%;
+  min-height: 75px;
+  margin: 0 auto;
+  border-bottom: 1px solid #a6e2c0;
+}
+
+@media (max-width: 800px) {
+  .question__area {
+    width: 80%;
+  }
+}
+
+@media (max-width: 440px) {
+  .question__area {
+    width: 90%;
+  }
+}
+
+.question__title {
+  padding-top: 28px;
+  padding-left: 17px;
+  padding-bottom: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.question__title:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.question__title-text1 {
+  font-family: Questrial;
+  font-size: 26px;
+  line-height: normal;
+  letter-spacing: 0.22px;
+  color: #70b282;
+  margin-right: 16px;
+}
+
+.question__title-text2 {
+  width: 90%;
+  font-family: 微軟正黑;
+  font-size: 22px;
+  line-height: normal;
+  letter-spacing: 0.16px;
+  color: #000000;
+}
+
+.question__ans {
+  max-width: 80%;
+  margin: 0px 20px 45px 68px;
+  background: rgba(225, 240, 245, 0.8);
+  border: 15px solid rgba(225, 240, 245, 0.8);
+  font-family: 微軟正黑;
+  font-size: 18px;
+  line-height: 1.8em;
+  letter-spacing: 0.14px;
+  white-space: pre-line;
+  color: #000000;
+}
+
+@media (max-width: 500px) {
+  .question__title-text1 {
+    font-size: 24px;
+  }
+
+  .question__title-text2 {
+    font-size: 20px;
+  }
+
+  .question__ans {
+    font-size: 16px;
+  }
+}
+
+/* lottery */
+.bg__pic-wrapper.lottery,
+.bg__pic-wrapper.login {
+  text-align: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bg__pic-wrapper.lottery img,
+.bg__pic-wrapper.login img {
+  width: 100%;
+  height: 80vh;
+  min-height: 780px;
+  object-fit: cover;
+  display: flex;
+}
+
+.lottery__info-area,
+.form__area {
+  font-family: MicrosoftJhengHei;
+  max-width: 500px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 20px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  position: absolute;
+}
+
+.lottery__info-area {
+  top: 10%;
+}
+
+.lottery__info-header,
+.form__area .login__header {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: normal;
+  text-align: center;
+  color: #5ec1b6;
+  padding: 20px 0;
+}
+
+.lottery__info {
+  padding-top: 15px;
+  padding-bottom: 20px;
+  border-bottom: dotted 1px #cdcdcdcd;
+  display: flex;
+}
+
+.lottery__info-title {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: normal;
+  color: #322929;
+}
+
+.lottery__info-text {
+  max-width: 360px;
+  font-size: 16px;
+  line-height: normal;
+  color: #322929;
+  margin-left: 10px;
+}
+
+.lottery__info-text.text-2 {
+  line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .lottery__info-area,
+  .form__area {
+    margin: 0;
+  }
+
+  .lottery__info {
+    flex-direction: column;
+  }
+
+  .lottery__info-text {
+    margin: 0 15px;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 500px) {
+  .lottery__info-area,
+  .form__area {
+    width: 100%;
+    border-radius: 0px;
+    padding: 20px 5px;
+  }
+}
+
+@media (max-width: 425px) {
+  .bg__pic-wrapper.lottery img {
+    min-height: 880px;
+  }
+
+  .bg__pic-wrapper.login img {
+    min-height: 780px;
+    height: 60vh;
+  }
+
+  .lottery__info-header {
+    font-size: 22px;
+  }
+}
+
+.lottery__btn-area,
+.login__btn-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  padding-top: 35px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.lottery-btn,
+.login__btn {
+  width: 400px;
+  height: 55px;
+  border-radius: 6px;
+  background-color: #e62a45;
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: #ffffff;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lottery-btn:hover,
+.login__btn:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.prize-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  position: absolute;
+  top: 10%;
+}
+
+.prize-area > h1 {
+  margin: 0 20px;
+  margin-bottom: 25px;
+  font-family: MicrosoftJhengHei;
+  font-size: 36px;
+  font-weight: normal;
+  line-height: normal;
+  text-align: center;
+  white-space: pre;
+  color: #ffffff;
+}
+
+.prize-area > h1.black {
+  color: #000;
+}
+
+@media (max-width: 400px) {
+  .prize-area > h1 {
+    font-size: 26px;
+  }
+  .prize-area > .lottery-btn {
+    width: 300px;
+  }
+}
+
+/* login */
+.form__area .login__header {
+  font-size: 35px;
+  border-bottom: 1px solid;
+  padding: 10px 0;
+}
+
+.login__btn {
+  border-width: 0px;
+}
+
+.login__form {
+  margin-top: 50px;
+}
+
+.input__wrapper {
+  margin-top: 35px;
+}
+
+@media (max-width: 500px) {
+  .input__wrapper {
+    margin-left: 15px;
+  }
+}
+
+.input__label {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.input__field {
+  width: 95%;
+  height: 25px;
+  font-size: 20px;
+  margin-top: 15px;
+}
+
+.login__btn-area {
+  margin-top: 20px;
+  padding-bottom: 5px;
+  padding-top: 25px;
+  flex-direction: column;
+}
+
+@media (max-width: 500px) {
+  .login__btn {
+    width: 100%;
+  }
+}
+
+.link__area {
+  margin-top: 20px;
+  font-size: 17px;
+}
+
+.link__area a {
+  text-decoration: underline;
+}
+
+/* admin */
+.admin__wrapper {
+  min-height: calc(100vh - 150px);
+  margin-bottom: 200px;
+  overflow: auto;
+}
+
+.tab__area {
+  width: 1500px;
+  margin: 0 auto;
+  padding-left: 25px;
+  padding-bottom: 25px;
+  text-align: left;
+}
+
+.tab__list {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #0000001f;
+}
+
+.tab-title {
+  display: inline-block;
+  text-align: center;
+  font-size: 20px;
+  color: gray;
+  padding: 15px 18px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0);
+  transition: all 0.25s;
+}
+
+.tab-title:hover {
+  cursor: pointer;
+  color: #40a9ff;
+}
+
+.tab-title + .tab-title {
+  margin-left: 35px;
+}
+
+.tab-title.active {
+  color: #1890ff;
+  border-bottom: 2px solid rgb(24, 144, 255);
+}
+
+.content__area {
+  margin-top: 25px;
+}
+
+table {
+  text-align: center;
+  border-spacing: 0;
+  border-bottom: 2px solid #c6cecd;
+}
+
+thead th {
+  font-size: 19px;
+  padding: 20px 30px;
+  background: #cfeaf9;
+}
+
+tbody td {
+  font-size: 16px;
+  padding: 15px 10px;
+}
+
+tbody td.alt {
+  height: 150px;
+  box-sizing: border-box;
+}
+
+tbody tr:nth-child(odd) {
+  background: #e5e5e5e6;
+}
+
+tbody .prize.origin {
+  width: 256px;
+}
+
+tbody .description.origin {
+  width: 321px;
+  height: 150px;
+}
+
+tbody .description.origin > div {
+  line-height: normal;
+  max-height: 150px;
+  overflow-y: auto;
+  white-space: pre;
+}
+
+tbody img.image {
+  width: 286px;
+  height: 150px;
+  box-sizing: border-box;
+  object-fit: contain;
+}
+
+.btn__area {
+  padding: 20px 15px;
+}
+
+.btn__area .btn,
+.add-btn {
+  color: #ffffff;
+  padding: 5px 15px;
+  border-width: 1px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.btn__area .btn:hover,
+.add-btn:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.btn__area .update-btn {
+  background: rgb(24, 144, 255);
+}
+
+.btn__area .delete__first-btn,
+.btn__area .delete__check-btn,
+.add__cancel-btn {
+  background: rgb(255, 24, 24);
+}
+
+.btn__area .btn + .btn {
+  margin-left: 10px;
+}
+
+tbody td.alt input.alt__text {
+  width: 50px;
+}
+
+tbody td.alt textarea {
+  width: 315px;
+  min-width: 315px;
+  max-width: 315px;
+  min-height: 24px;
+}
+
+tbody td.alt.image textarea {
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+}
+
+tbody td.alt.prize textarea {
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+}
+
+.btn__area .store-btn {
+  background: #009d8c;
+}
+
+.btn__area .cancel-btn,
+.btn__area .delete__cancel-btn {
+  background: #727978;
+}
+
+.add__check-btn {
+  background: #f77e37db;
+}
+
+.add-btn {
+  background: #f77e37db;
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 18px;
+}

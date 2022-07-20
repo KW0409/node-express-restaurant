@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../template/header', { 
+    title: 'W17餐廳 - 登入頁面' 
+  }) %>
+</head>
+
+<body>
+  <%- include('../template/navbar') %>
+
+  <div class="bg__pic-wrapper login">
+    <img src="css/lottery_pic/games-bn.png" class="login__pic">
+
+    <div class="form__area">
+      <% if (errorMsg && errorMsg.length !== 0) { %>
+        <h3 class="error">
+          <%= errorMsg %>
+        </h3>
+      <% } %>
+      
+      <div class="login__header">
+        登入
+      </div>
+      <form action="/login" method="POST" class="login__form">
+        <div class="input__wrapper">
+          <label class="input__label">帳號：
+            <input class="input__field" type="text" name="username" />
+          </label>
+        </div>
+
+        <div class="input__wrapper">
+          <label class="input__label">密碼：
+            <input class="input__field" type="password" name="password" />
+          </label>
+        </div>
+
+        <div class="login__btn-area">
+          <input type="submit" value="登入" class="login__btn"/>
+          <div class="link__area">
+            還沒有帳號？立即<a href="/register">免費註冊</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <%- include('../template/footer') %>
+</body>
+</html>

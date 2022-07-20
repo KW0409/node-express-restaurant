@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../template/header', { 
+    title: 'W17餐廳 - 後台頁面' 
+  }) %>
+</head>
+
+<body>
+  <%- include('../../template/navbar') %>
+
+  <div class="wrapper admin__wrapper">
+    <div class="title faq">
+      <span class="title__mark admin"></span><span class="title__text admin">後台管理</span>
+    </div>
+
+    <div class="tab__area">
+      <ul class="tab__list">
+        <li class="tab-title" id="lottery">抽獎項目</li>
+        <li class="tab-title" id="faq">常見問題</li>
+        <li class="tab-title" id="menu">菜單上傳</li>
+      </ul>
+
+      <div class="content__area">
+      </div>
+    </div>
+  </div>
+  
+  <%- include('../../template/footer') %>
+  <script src="/js/admin.js"></script>
+</body>
+
+</html>
