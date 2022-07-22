@@ -4,7 +4,7 @@ const MemoryStore = require("memorystore")(session);
 const flash = require("connect-flash");
 
 const app = express();
-const port = process.env.PORT || 5005;
+const port = process.env.JAB_PORT || 5005;
 const userController = require("./controllers/user");
 const lotteryController = require("./controllers/lottery");
 const questionController = require("./controllers/question");
