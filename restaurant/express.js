@@ -41,7 +41,7 @@ function redirectBack(req, res) {
 function checkIsAdmin(req, res, next) {
   if (!req.session.isAdmin) {
     if (req.url === "/admin") {
-      req.flash("errorMsg", "權限不足啊 靚仔！");
+      req.flash("errorMsg", "警告！您的權限不足！！！");
       return res.redirect("/");
     } else {
       // 取得資料前，要權限認證
