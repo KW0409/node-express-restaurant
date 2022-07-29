@@ -1,56 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <%- include('../template/header', { 
-    title: 'W17餐廳 - 註冊頁面' 
-  }) %>
-</head>
+  <head>
+    <%- include('../template/header', { title: 'JAB餐廳 - 註冊頁面' }) %>
+  </head>
 
-<body>
-  <%- include('../template/navbar') %>
+  <body>
+    <%- include('../template/navbar') %>
 
-  <div class="bg__pic-wrapper login">
-    <img src="css/lottery_pic/games-bn.png" class="login__pic">
+    <div class="bg__pic-wrapper login">
+      <img src="css/lottery_pic/games-bn.png" class="login__pic" />
 
-    <div class="form__area">
-      <% if (errorMsg && errorMsg.length !== 0) { %>
-        <h3 class="error">
-          <%= errorMsg %>
-        </h3>
-      <% } %>
+      <div class="form__area">
+        <% if (errorMsg && errorMsg.length !== 0) { %>
+        <h3 class="error"><%= errorMsg %></h3>
+        <% } %>
 
-      <div class="login__header">
-        註冊
-      </div>
-      <form action="/register" method="POST" class="login__form">
-        <div class="input__wrapper">
-          <label class="input__label">暱稱：
-            <input class="input__field" type="text" name="nickname" />
-          </label>
-        </div>
-
-        <div class="input__wrapper">
-          <label class="input__label">帳號：
-            <input class="input__field" type="text" name="username" />
-          </label>
-        </div>
-
-        <div class="input__wrapper">
-          <label class="input__label">密碼：
-            <input class="input__field" type="password" name="password" />
-          </label>
-        </div>
-
-        <div class="login__btn-area">
-          <input type="submit" value="註冊" class="login__btn"/>
-          <div class="link__area">
-            已經有帳號了？點擊<a href="/login">登入</a>
+        <div class="login__header">註冊</div>
+        <form action="/register" method="POST" class="login__form">
+          <div class="input__wrapper">
+            <label class="input__label"
+              >暱稱：
+              <input class="input__field" type="text" name="nickname" />
+            </label>
           </div>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <%- include('../template/footer') %>
-</body>
+          <div class="input__wrapper">
+            <label class="input__label"
+              >帳號：
+              <input class="input__field" type="text" name="username" />
+            </label>
+          </div>
+
+          <div class="input__wrapper">
+            <label class="input__label"
+              >密碼：
+              <input class="input__field" type="password" name="password" />
+            </label>
+          </div>
+
+          <div class="login__btn-area">
+            <input type="submit" value="註冊" class="login__btn" />
+            <div class="link__area">
+              已經有帳號了？點擊<a href="/login">登入</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <%- include('../template/footer') %>
+  </body>
 </html>

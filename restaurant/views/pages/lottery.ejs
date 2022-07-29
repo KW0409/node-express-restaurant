@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <%- include('../template/header', { 
-    title: 'W17餐廳 - 抽獎頁面' 
-  }) %>
-</head>
+  <head>
+    <%- include('../template/header', { title: 'JAB餐廳 - 抽獎頁面' }) %>
+  </head>
 
-<body>
-  <%- include('../template/navbar') %>
+  <body>
+    <%- include('../template/navbar') %>
 
-  <div class="bg__pic-wrapper lottery">
-    <img src="css/lottery_pic/games-bn.png" class="lottery__pic">
+    <div class="bg__pic-wrapper lottery">
+      <img src="css/lottery_pic/games-bn.png" class="lottery__pic" />
 
-    <div class="lottery__info-area">
-      <div class="lottery__info-header">
-        2020 夏日輕盈特賞！ 抽獎活動辦法
-      </div>
+      <div class="lottery__info-area">
+        <div class="lottery__info-header">2020 夏日輕盈特賞！ 抽獎活動辦法</div>
 
-      <div class="lottery__info">
-        <div class="lottery__info-title">活動期間：</div>
-        <div class="lottery__info-text">2020/06/01~2020/07/01</div>
-      </div>
-      <div class="lottery__info">
-        <div class="lottery__info-title">活動說明：</div>
-        <div class="lottery__info-text text-2">今天老闆佛心來著決定給大家發獎勵，有看有機會，沒看只能幫QQ！只要在店內消費滿1000000 元即有機會獲得 - 頭獎日本東京來回雙人遊！</div>
-      </div>
-      <div class="lottery__info">
-        <div class="lottery__info-title">獎  品：</div>
-        <span class="lottery__info-text text-2">❤ 頭獎一名：日本東京來回雙人遊(市價 14990 元)<br>
-        ❤ 貳獎三名：90 吋電視一台(市價 5990 元)<br>
-        ❤ 參獎十名：知名 YouTuber 簽名握手會入場券一張(市價 1500 元)</span>
-      </div>
-      
-      <div class="lottery__btn-area">
-        <div class="lottery-btn get__prize-btn">我要抽獎</div>
+        <div class="lottery__info">
+          <div class="lottery__info-title">活動期間：</div>
+          <div class="lottery__info-text">2020/06/01~2020/07/01</div>
+        </div>
+        <div class="lottery__info">
+          <div class="lottery__info-title">活動說明：</div>
+          <div class="lottery__info-text text-2">
+            今天老闆佛心來著決定給大家發獎勵，有看有機會，沒看只能幫QQ！只要在店內消費滿1000000
+            元即有機會獲得 - 頭獎日本東京來回雙人遊！
+          </div>
+        </div>
+        <div class="lottery__info">
+          <div class="lottery__info-title">獎  品：</div>
+          <span class="lottery__info-text text-2"
+            >❤ 頭獎一名：日本東京來回雙人遊(市價 14990 元)<br />
+            ❤ 貳獎三名：90 吋電視一台(市價 5990 元)<br />
+            ❤ 參獎十名：知名 YouTuber 簽名握手會入場券一張(市價 1500 元)</span
+          >
+        </div>
+
+        <div class="lottery__btn-area">
+          <div class="lottery-btn get__prize-btn">我要抽獎</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <%- include('../template/footer') %>
-  <script src='/js/lottery.js'></script>
-</body>
+    <%- include('../template/footer') %>
+    <script src="/js/lottery.js"></script>
+  </body>
 </html>

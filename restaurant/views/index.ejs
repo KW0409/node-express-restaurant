@@ -1,113 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <%- include('template/header', {
-    title: 'W17餐廳 - 首頁'
-  }) %>
-</head>
+  <head>
+    <%- include('template/header', { title: 'JAB餐廳 - 首頁' }) %>
+  </head>
 
-<body>
-  <%- include('template/navbar') %>
+  <body>
+    <%- include('template/navbar') %>
 
-  <!-- 一般使用者偷跑去 /admin 時 -->
-  <% if (errorMsg && errorMsg.length !== 0) { %>
-    <script>alert(`<%= errorMsg %>`)</script>
-  <% } %>
+    <!-- 一般使用者偷跑去 /admin 時 -->
+    <% if (errorMsg && errorMsg.length !== 0) { %>
+    <script>
+      alert(`<%= errorMsg %>`);
+    </script>
+    <% } %>
 
-  <div class="bg__pic-wrapper index">
-    <img src="css/index_pic/2@2x.png">
-    <span>咬一口廚房</span>
-  </div>
-
-  <div class="wrapper info__wrapper">
-    <div class="title">
-      <span class="title__mark"></span><span class="title__text">當輕食之風盛起</span>
+    <div class="bg__pic-wrapper index">
+      <img src="css/index_pic/2@2x.png" />
+      <span>咬一口廚房</span>
     </div>
 
-    <div class="description">
-      由於現代人生活忙碌，常以外食為主，當高糖、高鹽、高油成為人們的日常，會導致慢性疾病與肥胖的機率大增。<br>
-      我們定期走訪農田，選用最天然、營養的食材，以簡單的烹調方式處理，最大化忠實呈現食材原本的鮮味。<br>
-      咬一口不只賣餐點，我們希望能夠讓大家愛上料理的魅力，餐館特意打造全開放式廚房，烹調透明化，也不定時舉辦美食廚房DIY，讓大家體驗不需要過多調味，就能擁有千變萬化的食物口感。
+    <div class="wrapper info__wrapper">
+      <div class="title">
+        <span class="title__mark"></span
+        ><span class="title__text">當輕食之風盛起</span>
+      </div>
+
+      <div class="description">
+        由於現代人生活忙碌，常以外食為主，當高糖、高鹽、高油成為人們的日常，會導致慢性疾病與肥胖的機率大增。<br />
+        我們定期走訪農田，選用最天然、營養的食材，以簡單的烹調方式處理，最大化忠實呈現食材原本的鮮味。<br />
+        咬一口不只賣餐點，我們希望能夠讓大家愛上料理的魅力，餐館特意打造全開放式廚房，烹調透明化，也不定時舉辦美食廚房DIY，讓大家體驗不需要過多調味，就能擁有千變萬化的食物口感。
+      </div>
+
+      <div class="selector">
+        <a href="###" class="selector__link order__link">我要點餐</a>
+        <a href="###" class="selector__link search__link">查詢訂單</a>
+      </div>
     </div>
 
-    <div class="selector">
-      <a href="###" class="selector__link order__link">我要點餐</a>
-      <a href="###" class="selector__link search__link">查詢訂單</a>
-    </div>
-    
-  </div>
+    <div class="wrapper menu__wrapper">
+      <div class="title menu">
+        <span class="title__mark menu"></span
+        ><span class="title__text menu">Menu 搶先看</span>
+      </div>
 
-  <div class="wrapper menu__wrapper">
-    <div class="title menu">
-      <span class="title__mark menu"></span><span class="title__text menu">Menu 搶先看</span>
+      <div class="menu__pic-area">
+        <img src="css/index_pic/f-001@2x.png" class="menu__pic pic-1" />
+        <img src="css/index_pic/f-002@2x.png" class="menu__pic pic-2" />
+        <img src="css/index_pic/f-003@2x.png" class="menu__pic pic-3" />
+        <img src="css/index_pic/f-004@2x.png" class="menu__pic pic-4" />
+      </div>
     </div>
 
-    <div class="menu__pic-area">
-      <img src="css/index_pic/f-001@2x.png" class="menu__pic pic-1">
-      <img src="css/index_pic/f-002@2x.png" class="menu__pic pic-2">
-      <img src="css/index_pic/f-003@2x.png" class="menu__pic pic-3">
-      <img src="css/index_pic/f-004@2x.png" class="menu__pic pic-4">
-    </div>
-  </div>
+    <div class="wrapper discuss__wrapper">
+      <div class="title discuss">
+        <span class="title__mark discuss"></span
+        ><span class="title__text discuss">吃過都說好</span>
+      </div>
 
-  <div class="wrapper discuss__wrapper">
-    <div class="title discuss">
-      <span class="title__mark discuss"></span><span class="title__text discuss">吃過都說好</span>
-    </div>
-  
-    <div class="discuss-area">
-      <div class="discuss__square square-1">
-        <div>
-          <img src="css/index_pic/p-1.png" class="square__avatar square-1">
-          <div class="square__avatar-name square-1">
-            國父桑
+      <div class="discuss-area">
+        <div class="discuss__square square-1">
+          <div>
+            <img src="css/index_pic/p-1.png" class="square__avatar square-1" />
+            <div class="square__avatar-name square-1">國父桑</div>
+          </div>
+
+          <div class="square__text square-1">
+            我一生疲於建國，去過日本，去過歐洲，卻從未到過台北101，也從來沒有吃過這麼好吃的東西...今天在時空旅行者的幫助下我終於吃到了...此生再無遺憾
+            QAQ!!
           </div>
         </div>
 
-        <div class="square__text square-1">
-          我一生疲於建國，去過日本，去過歐洲，卻從未到過台北101，也從來沒有吃過這麼好吃的東西...今天在時空旅行者的幫助下我終於吃到了...此生再無遺憾 QAQ!!
-        </div>
-      </div>
-      
-      <div class="discuss__square square-2">
-        <div>
-          <img src="css/index_pic/p-2.png" class="square__avatar square-2">
-          <div class="square__avatar-name square-2">
-            可達鴨
+        <div class="discuss__square square-2">
+          <div>
+            <img src="css/index_pic/p-2.png" class="square__avatar square-2" />
+            <div class="square__avatar-name square-2">可達鴨</div>
+          </div>
+
+          <div class="square__text square-2">
+            三雙鞋等於30，兩個人加一雙鞋等於20，一雙冰淇淋加一雙冰淇淋加一個人等於13，那
+            $#%$#%^%$^##$% 等於多少...唉，大概咬一口就知道了!!!
           </div>
         </div>
 
-        <div class="square__text square-2">
-          三雙鞋等於30，兩個人加一雙鞋等於20，一雙冰淇淋加一雙冰淇淋加一個人等於13，那 $#%$#%^%$^##$% 等於多少...唉，大概咬一口就知道了!!!
-        </div>
-      </div>
+        <div class="discuss__square square-3">
+          <div>
+            <img src="css/index_pic/p-3.png" class="square__avatar square-3" />
+            <div class="square__avatar-name square-3">旅かえる旅行青蛙</div>
+          </div>
 
-      <div class="discuss__square square-3">
-        <div>
-          <img src="css/index_pic/p-3.png" class="square__avatar square-3">
-          <div class="square__avatar-name square-3">
-            旅かえる旅行青蛙
+          <div class="square__text square-3">
+            自從呱呱呱呱呱以後，我呱呱呱呱呱，非常感謝呱呱呱呱呱，下次呱呱呱呱呱我呱呱呱呱呱，一定呱呱呱呱呱!!!
           </div>
         </div>
-      
-        <div class="square__text square-3">
-          自從呱呱呱呱呱以後，我呱呱呱呱呱，非常感謝呱呱呱呱呱，下次呱呱呱呱呱我呱呱呱呱呱，一定呱呱呱呱呱!!!
-        </div>
       </div>
     </div>
-  </div>
 
-  <div class="wrapper address__wrapper">
-    <div class="title address">
-      <span class="title__mark address"></span><span class="title__text address">我們在哪裡</span>
+    <div class="wrapper address__wrapper">
+      <div class="title address">
+        <span class="title__mark address"></span
+        ><span class="title__text address">我們在哪裡</span>
+      </div>
     </div>
-  </div>
-  <div class="map__area">
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5136.126151845156!2d121.56245755335857!3d25.032515271296727!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abb6da80a7ad%3A0xacc4d11dc963103c!2z5Y-w5YyXMTAx!5e0!3m2!1szh-TW!2stw!4v1621682862102!5m2!1szh-TW!2stw"
-      allowfullscreen="" loading="lazy" class="google__map-iframe"></iframe>
-  </div>
-  
-  <%- include('template/footer') %>
-</body>
+    <div class="map__area">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5136.126151845156!2d121.56245755335857!3d25.032515271296727!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abb6da80a7ad%3A0xacc4d11dc963103c!2z5Y-w5YyXMTAx!5e0!3m2!1szh-TW!2stw!4v1621682862102!5m2!1szh-TW!2stw"
+        allowfullscreen=""
+        loading="lazy"
+        class="google__map-iframe"
+      ></iframe>
+    </div>
+
+    <%- include('template/footer') %>
+  </body>
 </html>
