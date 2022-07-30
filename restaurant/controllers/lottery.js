@@ -8,8 +8,7 @@ function randomPrize(systemErrWeight, prizeDatas) {
     // 讓系統有一定機率回傳會觸發前端 '系統不穩定' 機制的OPEN獎
     const openPrize = {
       rank: "OPEN獎",
-      description:
-        "汪勒個汪！我是 OPEN 獎，偷偷告訴你，其實系統才沒有不穩定勒～",
+      description: "偷偷告訴你，其實系統才沒有不穩定勒～",
     };
     return openPrize;
   }
