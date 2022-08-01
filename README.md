@@ -9,7 +9,7 @@
 >
 > 後台測試帳密：admin00/admin00
 
-![餐廳網站截圖](https://i.imgur.com/znJvjej.png "餐廳網站截圖")
+![餐廳網站截圖](https://user-images.githubusercontent.com/80152099/182073338-899c0396-c309-4898-b32b-ac020828f1f9.png "餐廳網站截圖")
 
 ## 目錄
 
