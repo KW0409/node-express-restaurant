@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../../template/header', { title: 'JAB餐廳 - 後台頁面' }) %>
+    <%- include('../../template/header', { title: 'JAB餐廳 - 使用者頁面' }) %>
   </head>
 
   <body>
@@ -10,14 +10,13 @@
     <div class="wrapper admin__wrapper">
       <div class="title faq">
         <span class="title__mark admin"></span
-        ><span class="title__text admin">後台管理</span>
+        ><span class="title__text admin">會員專區</span>
       </div>
 
       <div class="tab__area">
         <ul class="tab__list">
-          <li class="tab-title" id="lottery">抽獎項目</li>
-          <li class="tab-title" id="faq">常見問題</li>
-          <li class="tab-title" id="menu">菜單上傳</li>
+          <li class="tab-title" id="data">會員資料</li>
+          <li class="tab-title" id="order">訂單記錄</li>
         </ul>
 
         <div class="content__area"></div>
@@ -25,6 +24,6 @@
     </div>
 
     <%- include('../../template/footer') %>
-    <script src="/js/users/admin.js"></script>
+    <script src="/js/users/user.js"></script>
   </body>
 </html>

@@ -74,7 +74,10 @@ app.get("/lottery", lotteryController.lotteryPage);
 // 提供隨機獎品路由
 app.get("/lottery-prize-api", lotteryController.prizeOffer);
 
-// 後台管理路由
+// 使用者會員專區路由
+app.get("/user", userController.user);
+
+// 店家後台管理路由
 app.get("/admin", checkIsAdmin, userController.admin);
 
 // 抽獎管理路由
