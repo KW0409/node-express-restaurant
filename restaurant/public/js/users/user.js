@@ -484,6 +484,7 @@ const orderUtils = {
     try {
       // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
       // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
+      // const dataArr = await orderUtils.getAPI();
       const dataArr = [
         {
           // (await orderUtils.getAPI());
