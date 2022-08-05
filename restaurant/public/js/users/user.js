@@ -22,7 +22,7 @@ const documentUtils = {
   // 塞入表格的內容
   getTabContent: (targetTab, newTabContent) => {
     if (targetTab === "order") {
-      const titleArr = ["訂單編號", "訂單金額", "訂單狀態", "管理"];
+      const titleArr = ["訂單編號", "訂單日期", "金額", "狀態", "管理"];
       documentUtils.getTableTitle(newTabContent, titleArr);
       orderUtils.getContent(newTabContent);
     }
@@ -231,7 +231,7 @@ function encodeHTML(str) {
     .replace(/"/g, "&quot;");
 }
 
-/* 會員資料的 func */
+/* 會員資料的 func */ //TODO:
 const dataUtils = {
   adminURL: "/admin-lottery",
 
@@ -256,8 +256,9 @@ const dataUtils = {
     }
   },
 
-  updateAPI: async (id, data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-update/${id}`, {
+  updateAPI: async (data) => {
+    // 在使用者的 controller 去拿 req.session.username 來做權限管理的身份確認
+    const response = await fetch(`${dataUtils.adminURL}-update`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: new Headers({
@@ -316,32 +317,62 @@ const dataUtils = {
 
   template: (data) => {
     const htmlTemplate = `
-      <div class="wrapper">
-        <div>帳號：<span>${encodeHTML(data.username)}</span></div>
-        <div>姓名：<span>${encodeHTML(data.name)}</span></div>
-        <div>地址：<span>${encodeHTML(data.address)}</span></div>
-        <div>電話：<span>${encodeHTML(data.phone)}</span></div>
-        <div>信箱：<span>${encodeHTML(data.email)}</span></div>
-        
-        <div class="handle__add-btn hide">
-          <input class="btn handle-add add__check-btn" type="button" value="編輯">
+      <div class="data__wrapper">
+        <div class="user-data">帳號：
+          <span>${encodeHTML(data.username)}</span>
         </div>
-      </div>
-      `;
+        <div class="user-data name">姓名：
+          <span class="origin">${encodeHTML(data.name)}</span>
+          <input class="alt hide alt__text" type="text" value=${encodeHTML(
+            data.name
+          )}>
+        </div>
+        <div class="user-data address">地址：
+          <span class="origin">${encodeHTML(data.address)}</span>
+          <input class="alt hide alt__text" type="text" value=${encodeHTML(
+            data.address
+          )}>
+        </div>
+        <div class="user-data phone">電話：
+          <span class="origin">${encodeHTML(data.phone)}</span>
+          <input class="alt hide alt__text" type="tel" value=${encodeHTML(
+            data.phone
+          )}>
+        </div>
+        <div class="user-data email">信箱：
+          <span class="origin">${encodeHTML(data.email)}</span>
+          <input class="alt hide alt__text" type="email" value=${encodeHTML(
+            data.email
+          )}>
+        </div>
+        
+        <div class="btn__area">
+          <div class="handle__update-btn origin">
+            <input class="btn update-btn" type="button" value="編輯">
+          </div>
+
+          <div class="handle__store-btn alt hide">
+            <input class="btn store-btn" type="button" value="儲存">
+            <input class="btn cancel-btn" type="button" value="取消">
+          </div>
+        </div>
+      </div>`;
     return htmlTemplate;
   },
 
   getContent: async (newTabContent) => {
+    //TODO:
     try {
       // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
       // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
       const dataObj = {
-        username: "",
-        name: "",
-        address: "",
-        phone: "",
-        email: "",
-      }; // (await dataUtils.getAPI());
+        // (await dataUtils.getAPI());
+        username: "user00",
+        name: "user",
+        address: "台灣台北",
+        phone: "09123456789",
+        email: "user@mail.com",
+      };
       newTabContent.innerHTML = dataUtils.template(dataObj);
     } catch (err) {
       console.log(err);
@@ -350,7 +381,7 @@ const dataUtils = {
   },
 };
 
-/* 訂單記錄的 func */
+/* 訂單記錄的 func */ //TODO:
 const orderUtils = {
   adminURL: "/admin-lottery",
 
@@ -436,85 +467,41 @@ const orderUtils = {
   template: (data) => {
     const htmlTemplate = `
       <input type="hidden" class="id" value=${data.id}></input>
-      <td class="sequence origin">${data.sequence}</td>
-      <td class="rank origin">${encodeHTML(data.rank)}</td>
-      <td class="prize origin">${encodeHTML(data.prize)}</td>
-      <td class="description origin">
-        <div>${encodeHTML(data.description)}</div>
-      </td>
-      <td class="image origin">
-        <img class="image" src=${encodeHTML(data.image)}>
-      </td>
-      <td class="amount origin">${data.amount} 位</td>
-      <td class="percentage origin">${data.percentage}%</td>
-      <td class="btn__area origin">
-        <div class="first__check-btn">
-          <input class="btn update-btn" type="button" value="編輯">
-          <input class="btn delete-btn delete__first-btn" type="button" value="刪除">
-        </div>
-
-        <div class="double__check-btn hide">
-          <input class="btn delete-btn delete__check-btn" type="button" value="確認">
-          <input class="btn delete-btn delete__cancel-btn" type="button" value="取消">
-        </div>
-      </td>
-
-      <td class="sequence alt hide">
-        <input class="alt__text" type="number" min="1" value=${data.sequence}>
-      </td>
-      <td class="rank alt hide">
-        <input class="alt__text" type="text" value=${encodeHTML(data.rank)}>
-      </td>
-      <td class="prize alt hide">
-        <textarea class="alt__text" rows="1">${encodeHTML(
-          data.prize
-        )}</textarea>
-      </td>
-      <td class="description alt hide">
-        <textarea class="alt__text" rows="3">${encodeHTML(
-          data.description
-        )}</textarea>
-      </td>
-      <td class="image alt hide">
-        <textarea class="alt__text" rows="1">${encodeHTML(
-          data.image
-        )}</textarea>
-      </td>
-      <td class="amount alt hide">
-        <input class="alt__text" type="number" min="1" value=${data.amount}>位
-      </td>
-      <td class="percentage alt hide">
-        <input class="alt__text" type="number" min="1" max="100" value=${
-          data.percentage
-        }>%
-      </td>
-      <td class="btn__area alt hide">
-        <div class="handle__store-btn">
-          <input class="btn store-btn" type="button" value="儲存">
-          <input class="btn cancel-btn" type="button" value="取消">
-        </div>
-
-        <div class="handle__add-btn hide">
-          <input class="btn handle-add add__check-btn" type="button" value="新增">
-          <input class="btn handle-add add__cancel-btn" type="button" value="取消">
-        </div>
+      <td class="sequence origin">${data.num}</td>
+      <td class="sequence origin">${encodeHTML(data.createdAt)}</td>
+      <td class="rank origin">${encodeHTML(data.price)}</td>
+      <td class="prize origin">${encodeHTML(data.state)}</td>
+      <td class="btn__area">
+        <input type="button" value="查看詳情" onclick="location.href='/order-detail'">
       </td>`;
+    // TODO: 確認上面的 onclick 超連結寫法是否正確
     return htmlTemplate;
   },
 
   getContent: async (newTabContent) => {
+    //TODO:
     const tbody = newTabContent.querySelector("tbody");
     try {
-      const dataArr = await orderUtils.getAPI();
+      // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
+      // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
+      const dataArr = [
+        {
+          // (await orderUtils.getAPI());
+          id: 1,
+          createdAt: "2022-08-05 14:23:51",
+          num: 123321,
+          price: "$520",
+          state: "處理中",
+        },
+      ];
       for (let i = 0; i < dataArr.length; i++) {
         const tableRow = document.createElement("tr");
         tableRow.innerHTML = orderUtils.template(dataArr[i]);
         tbody.appendChild(tableRow);
       }
-      // 新增完成後再將表格排序
-      documentUtils.tableArrange(newTabContent);
     } catch (err) {
       console.log(err);
+      newTabContent.innerHTML = `<span>error</span>`; //TODO:
     }
   },
 };
@@ -577,41 +564,48 @@ const eventListenerUtils = {
     tabContentArea.addEventListener("click", (e) => {
       // 編輯功能
       if (e.target.classList.contains("update-btn")) {
-        documentUtils.tableUpdate(e);
+        const targetTabContent = e.target.closest(".tab-content");
+        const OriginContents = targetTabContent.querySelectorAll(".origin");
+        const AltInput = targetTabContent.querySelectorAll(".alt");
+
+        for (let i = 0; i < OriginContents.length; i++) {
+          OriginContents[i].classList.add("hide");
+          AltInput[i].classList.remove("hide");
+        }
       }
 
       // 取消編輯功能
       if (e.target.classList.contains("cancel-btn")) {
-        documentUtils.tableCancel(e);
+        const targetTabContent = e.target.closest(".tab-content");
+        const OriginContents = targetTabContent.querySelectorAll(".origin");
+        const AltInput = targetTabContent.querySelectorAll(".alt");
+        for (let i = 0; i < OriginContents.length; i++) {
+          OriginContents[i].classList.remove("hide");
+          AltInput[i].classList.add("hide");
+        }
       }
 
-      // 刪除功能
-      if (e.target.classList.contains("delete-btn")) {
-        documentUtils.tableDeleteRow(e, "lottery");
-      }
-
-      const classNameArr = [
-        "sequence",
-        "rank",
-        "prize",
-        "description",
-        "image",
-        "amount",
-        "percentage",
-      ];
+      let classNameArr = ["name", "address", "phone", "email"];
       // 儲存功能
       if (e.target.classList.contains("store-btn")) {
-        documentUtils.tableStore(e, "lottery", classNameArr);
-      }
+        const targetTabContent = e.target.closest(".tab-content");
+        const data = { username: "user00" }; // TODO: 這邊只是暫時這樣寫，以免在下面 dataUtils.template(data) 出錯
+        for (const className of classNameArr) {
+          data[className] = targetTabContent.querySelector(
+            `.${className} .alt__text`
+          ).value;
+        }
 
-      // 新增功能(只新增欄位)
-      if (e.target.classList.contains("add-btn")) {
-        documentUtils.tableAddRow(e, "lottery", classNameArr);
-      }
-
-      // 新增功能(新增到資料庫)
-      if (e.target.classList.contains("handle-add")) {
-        documentUtils.tableAddData(e, "lottery", classNameArr);
+        dataUtils
+          .updateAPI(data)
+          .then(() => {
+            targetTabContent.innerHTML = dataUtils.template(data);
+          })
+          .catch((err) => {
+            // TODO: 這邊只是暫時這樣寫，之後要改成 try/catch，並加上比較好的錯誤處理
+            console.log(err);
+            targetTabContent.innerHTML = dataUtils.template(data);
+          });
       }
     });
   },

@@ -862,11 +862,16 @@ h3.error {
 }
 
 .tab__area {
-  width: 80%;
+  width: 1250px;
   margin: 0 auto;
   padding-left: 25px;
   padding-bottom: 25px;
   text-align: left;
+}
+
+.tab__area.user {
+  width: 80%;
+  max-width: 850px;
 }
 
 .tab__list {
@@ -901,6 +906,32 @@ h3.error {
 
 .content__area {
   margin-top: 25px;
+}
+
+.data__wrapper {
+  padding: 15px 25px;
+  font-size: 18px;
+}
+
+.user-data {
+  font-weight: bold;
+}
+
+.user-data + .user-data {
+  margin-top: 25px;
+}
+
+@media (min-width: 500px) {
+  .user-data > input.alt__text {
+    width: 250px;
+  }
+}
+
+.data__wrapper > .btn__area {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 50px;
+  padding-left: 15px;
 }
 
 table {
@@ -946,7 +977,7 @@ tbody .description.origin > div {
 }
 
 tbody img.image {
-  width: 286px;
+  width: 175px;
   height: 150px;
   box-sizing: border-box;
   object-fit: contain;
@@ -982,7 +1013,7 @@ tbody img.image {
 }
 
 .btn__area .btn + .btn {
-  margin-left: 10px;
+  margin-top: 10px;
 }
 
 tbody td.alt input.alt__text {
@@ -990,20 +1021,17 @@ tbody td.alt input.alt__text {
 }
 
 tbody td.alt textarea {
-  width: 315px;
   min-width: 315px;
   max-width: 315px;
   min-height: 24px;
 }
 
 tbody td.alt.image textarea {
-  width: 280px;
-  min-width: 280px;
-  max-width: 280px;
+  min-width: 175px;
+  max-width: 175px;
 }
 
 tbody td.alt.prize textarea {
-  width: 250px;
   min-width: 250px;
   max-width: 250px;
 }
