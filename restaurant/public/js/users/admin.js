@@ -875,7 +875,7 @@ const memberUtils = {
       <td class="prize origin">NT$.${data.order.totalPrice}</td>
       <td class="prize origin">${userState}</td>
       <td class="btn__area">
-        <input type="button" value="查看詳情" onclick="location.href='/member-detail'">
+        <input type="button" value="查看詳情" onclick="location.href='/admin/member-detail'">
       </td>`;
     // TODO: 確認上面的 onclick 超連結寫法是否正確
     return template;
@@ -1005,7 +1005,7 @@ const orderUtils = {
       <td class="prize origin">${encodeHTML(data.user.name)}</td>
       <td class="prize origin">NT$.${data.price}</td>
       <td class="btn__area">
-        <input type="button" value="查看詳情" onclick="location.href='/order-detail'">
+        <input type="button" value="查看詳情" onclick="location.href='/admin/order-detail'">
       </td>`;
     // TODO: 確認上面的 onclick 超連結寫法是否正確
     return template;

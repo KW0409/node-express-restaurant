@@ -108,8 +108,35 @@ const userController = {
   },
 
   admin: (req, res) => {
-    // 進入後台管理前，要權限認證
     res.render("users/admin/admin");
+  },
+
+  // TODO:
+  memberDetail: (req, res) => {
+    const data = {
+      // (await dataUtils.getAPI());
+      username: "user00",
+      name: "user",
+      address: "台灣台北",
+      phone: "09123456789",
+      email: "user@mail.com",
+      user_auth: 0,
+    };
+    res.render("users/admin/memberDetail", { data });
+  },
+
+  // TODO:
+  orderDetail: (req, res) => {
+    const data = {
+      // (await dataUtils.getAPI());
+      username: "user00",
+      name: "user",
+      address: "台灣台北",
+      phone: "09123456789",
+      email: "user@mail.com",
+      user_auth: 0,
+    };
+    res.render("users/orderDetail", { data });
   },
 };
 

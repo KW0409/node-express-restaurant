@@ -77,8 +77,27 @@ app.get("/lottery-prize-api", lotteryController.prizeOffer);
 // 使用者會員專區路由
 app.get("/user", userController.user);
 
+// 我的訂單路由
+// TODO: get 路由要補上 /:id
+// TODO: 之後可考慮改成 restful 寫法，如：/admin/member/:id, /admin/member/:id
+app.get("/user/order-detail", userController.orderDetail);
+// app.post("/admin-member-update/:id", checkIsAdmin, userController.handleUpdate);
+
 // 店家後台管理路由
+// TODO: 進入後台管理前，要權限認證
 app.get("/admin", checkIsAdmin, userController.admin);
+
+// 會員管理路由
+// TODO: get 路由要補上 /:id
+// TODO: 之後可考慮改成 restful 寫法，如：/admin/member/:id, /admin/member/:id
+app.get("/admin/member-detail", checkIsAdmin, userController.memberDetail);
+// app.post("/admin-member-update/:id", checkIsAdmin, userController.handleUpdate);
+
+// 訂單列表路由
+// TODO: get 路由要補上 /:id
+// TODO: 之後可考慮改成 restful 寫法，如：/admin/member/:id, /admin/member/:id
+app.get("/admin/order-detail", checkIsAdmin, userController.orderDetail);
+// app.post("/admin-member-update/:id", checkIsAdmin, userController.handleUpdate);
 
 // 抽獎管理路由
 app.get("/admin-lottery-get", checkIsAdmin, lotteryController.getAdmin);

@@ -467,13 +467,14 @@ const orderUtils = {
   template: (data) => {
     const htmlTemplate = `
       <input type="hidden" class="id" value=${data.id}></input>
-      <td class="sequence origin">${data.num}</td>
-      <td class="sequence origin">${encodeHTML(data.createdAt)}</td>
-      <td class="rank origin">${encodeHTML(data.price)}</td>
-      <td class="prize origin">${encodeHTML(data.state)}</td>
-      <td class="btn__area">
-        <input type="button" value="查看詳情" onclick="location.href='/user/order-detail'">
-      </td>`;
+      <td class="image origin">
+        <img class="image" src=${encodeHTML(data.image)}>
+      </td>
+      <td class="dishname origin">${encodeHTML(data.dishname)}</td>
+      <td class="price origin">${encodeHTML(data.price)}</td>
+      <td class="count origin">${data.count}</td>
+      <td class="total-price origin">${encodeHTML(data.totalPrice)}</td>
+      `;
     // TODO: 確認上面的 onclick 超連結寫法是否正確
     return htmlTemplate;
   },
@@ -488,11 +489,11 @@ const orderUtils = {
       const dataArr = [
         {
           // (await orderUtils.getAPI());
-          id: 1,
-          createdAt: "2022-08-05 14:23:51",
-          num: 123321,
-          price: "$520",
-          state: "處理中",
+          image: "/css/lottery_pic/bg.png",
+          dishname: "鮮嫩洋芋白丁佐莎莎",
+          price: "$260",
+          count: 2,
+          totalPrice: "$520",
         },
       ];
       for (let i = 0; i < dataArr.length; i++) {
@@ -508,54 +509,10 @@ const orderUtils = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 點擊 tab 頁籤改變樣式和顯示相應的內容
-  document.querySelector(".tab__area").addEventListener("click", (e) => {
-    if (e.target.classList.contains("tab-title")) {
-      // 改變 tab-title 的樣式
-      const tabTitle = document.querySelectorAll(".tab-title");
-      for (let i = 0; i < tabTitle.length; i++) {
-        if (tabTitle[i].classList.contains("active")) {
-          tabTitle[i].classList.remove("active");
-        }
-      }
-      e.target.classList.add("active");
-
-      // 先隱藏 tab-content 的所有內容
-      const tabContents = document.querySelectorAll(".tab-content");
-      for (let i = 0; i < tabContents.length; i++) {
-        tabContents[i].classList.add("hide");
-      }
-
-      // 再按照選擇的頁籤動態新增 tab-content 的內容
-      const targetTab = e.target.id;
-      const targetTabContent = document.querySelector(
-        `.tab-content#${targetTab}content` // TODO: 兩者的關係在這
-      );
-      const contentArea = document.querySelector(".content__area");
-      if (targetTabContent) {
-        // 如果已經有內容，顯示出來即可
-        targetTabContent.classList.remove("hide");
-      } else {
-        const newTabContent = document.createElement("div");
-        newTabContent.classList.add("tab-content");
-        newTabContent.setAttribute("id", `${targetTab}content`); // TODO: 兩者的關係在這
-        if (targetTab === "order") {
-          newTabContent.innerHTML = documentUtils.tableTemplate;
-          contentArea.appendChild(newTabContent);
-          documentUtils.getTabContent(targetTab, newTabContent);
-        } else {
-          contentArea.appendChild(newTabContent);
-          dataUtils.getContent(newTabContent);
-        }
-        eventListenerUtils[`${targetTab}`](newTabContent);
-      }
-    }
-  });
-
-  // 讓畫面一開始就呈現出抽獎項目的內容
-  // 必須放在 tab__area 的 eventListener 之後才有用
-  const dataTab = document.querySelector(".tab-title#data");
-  dataTab.click();
+  const contentArea = document.querySelector(
+    ".order-data-container > .content"
+  );
+  orderUtils.getContent(contentArea);
 });
 
 /* 各個表格的 func */
