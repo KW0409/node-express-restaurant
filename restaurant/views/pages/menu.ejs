@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../template/header', { title: 'JAB餐廳 - 點餐頁面' }) %>
+  </head>
+
+  <body>
+    <%- include('../template/navbar') %>
+
+    <div class="pic-wrapper menu">
+      <img src="css/menu_pic/f-title.png" />
+    </div>
+
+    <div class="wrapper info__wrapper menu">
+      <div class="pic-wrapper menu info">
+        <img src="css/menu_pic/order-ad.png" />
+      </div>
+
+      <div class="description menu">
+        <div class="title-text">在家也能輕鬆咬一口我們的鮮甜清爽</div>
+        <p>
+          您再也不必受限於時間或地點，隨時隨地透過我們24小時的線上購物選購，咬一口廚房堅持以細選食材、輕盈口感，呈現食材本身的原滋原味。
+        </p>
+        <p>
+          我們將咬一口的經典菜色研發製成相應當季的包裝食品及各式精美的伴手禮盒。將剛出爐的新鮮迅速送達家人手中，也適合與更多喜愛咬一口的親朋好友分享難得的健康滋味。
+        </p>
+      </div>
+    </div>
+
+    <div class="wrapper dish__wrapper">
+      <div class="title dish">
+        <span class="title__mark"></span
+        ><span class="title__text">開始點餐</span>
+      </div>
+
+      <div class="dish-card-area"></div>
+    </div>
+
+    <%- include('../template/footer') %>
+    <script src="/js/menu.js"></script>
+  </body>
+</html>

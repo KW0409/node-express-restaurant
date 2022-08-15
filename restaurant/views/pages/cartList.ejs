@@ -1,35 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../template/header', { title: 'JAB餐廳 - 訂單明細' }) %>
+    <%- include('../template/header', { title: 'JAB餐廳 - 購物清單' }) %>
   </head>
 
   <body>
     <%- include('../template/navbar') %>
 
     <div class="wrapper admin__wrapper">
-      <div class="title faq">
-        <span class="title__mark admin"></span
-        ><span class="title__text admin">訂單明細</span>
-      </div>
-
       <div class="order-data-container">
         <div class="title">
           <div>
-            <div>訂單日期：2022-08-05 14:23:51</div>
-            <div>訂單編號：123321</div>
-            <div>待處理</div>
-          </div>
-          <div class="btn__area">
-            <div class="handle__update-btn origin">
-              <input class="btn update-btn" type="button" value="待領取" />
-              <input class="btn cancel-btn" type="button" value="取消訂單" />
-            </div>
-
-            <div class="handle__update-btn origin">
-              <input class="btn update-btn" type="button" value="已完成" />
-              <input class="btn cancel-btn" type="button" value="取消訂單" />
-            </div>
+            <div>購物清單</div>
           </div>
         </div>
         <div class="content">
@@ -52,25 +34,36 @@
         <div class="title">帳單資訊</div>
         <div class="content">
           <div class="user-data name">
-            姓名：<span class="origin"><%= data.name %></span>
+            姓名：<input type="text"></input>
           </div>
           <div class="user-data phone">
-            電話：<span class="origin"><%= data.phone %></span>
+            電話：<input type="text"></input>
           </div>
           <div class="user-data address">
-            地址：<span class="origin"><%= data.address %></span>
+            地址：<input type="text"></input>
           </div>
           <div class="user-data email">
-            信箱：<span class="origin"><%= data.email %></span>
+            信箱：<input type="text"></input>
           </div>
 
           <div class="btn__area">
             <div class="handle__update-btn origin">
+              <!-- TODO: -->
               <input
                 class="redirect-btn"
                 type="button"
-                value="回訂單列表"
-                onclick="location.href='/admin/order-detail'"
+                value="繼續購物"
+                onclick="location.href='###'"
+              />
+            </div>
+
+            <div class="handle__update-btn origin">
+              <!-- TODO: -->
+              <input
+                class="confirm-btn"
+                type="button"
+                value="確認送出"
+                onclick="location.href='###'"
               />
             </div>
           </div>
@@ -79,6 +72,6 @@
     </div>
 
     <%- include('../template/footer') %>
-    <script src="/js/users/orderDetail.js"></script>
+    <script src="/js/cartList.js"></script>
   </body>
 </html>

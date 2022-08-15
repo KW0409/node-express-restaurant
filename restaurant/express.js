@@ -74,6 +74,18 @@ app.get("/lottery", lotteryController.lotteryPage);
 // 提供隨機獎品路由
 app.get("/lottery-prize-api", lotteryController.prizeOffer);
 
+// 購物清單路由
+// TODO: get 路由要補上 /:id
+// TODO: 之後可考慮改成 restful 寫法，如：/admin/member/:id, /admin/member/:id
+app.get("/cart", userController.cartList);
+// app.post("/admin-member-update/:id", checkIsAdmin, userController.handleUpdate);
+
+// 點餐路由
+// TODO: get 路由要補上 /:id
+// TODO: 之後可考慮改成 restful 寫法，如：/admin/member/:id, /admin/member/:id
+app.get("/menu", userController.menu);
+// app.post("/admin-member-update/:id", checkIsAdmin, userController.handleUpdate);
+
 // 使用者會員專區路由
 app.get("/user", userController.user);
 

@@ -138,6 +138,16 @@ const userController = {
     };
     res.render("users/orderDetail", { data });
   },
+
+  // TODO:
+  cartList: (req, res) => {
+    res.render("pages/cartList");
+  },
+
+  // TODO:
+  menu: (req, res) => {
+    res.render("pages/menu");
+  },
 };
 
 module.exports = userController;
