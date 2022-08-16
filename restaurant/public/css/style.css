@@ -1119,7 +1119,7 @@ tbody .description.origin > div,
   line-height: normal;
   max-height: 150px;
   overflow-y: auto;
-  white-space: pre-wrap;
+  white-space: pre-line;
 }
 
 tbody img.image {
@@ -1135,6 +1135,18 @@ tbody .heading.origin {
 
 tbody .content.origin {
   width: 750px;
+}
+
+tbody .dishname.origin {
+  width: 180px;
+}
+
+tbody .dish-description.origin {
+  width: 400px;
+}
+
+tbody .dish-price.origin {
+  width: 95px;
 }
 
 .btn__area {

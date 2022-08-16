@@ -697,13 +697,13 @@ const menuUtils = {
       <input type="hidden" class="id" value=${data.id}></input>
       <td class="sequence origin">${data.sequence}</td>
       <td class="dishname origin">${encodeHTML(data.name)}</td>
-      <td class="description origin">
+      <td class="description dish-description origin">
         <div>${encodeHTML(data.description)}</div>
       </td>
       <td class="image origin">
         <img class="image" src=${encodeHTML(data.image)}>
       </td>
-      <td class="price origin">NT. ${data.price}</td>
+      <td class="price dish-price origin">NT.${data.price}</td>
       <td class="state origin">${data.state}</td>
       <td class="btn__area origin">
         <div class="first__check-btn">
