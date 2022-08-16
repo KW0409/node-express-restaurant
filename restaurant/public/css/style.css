@@ -1106,16 +1106,20 @@ tbody .prize.origin {
   width: 256px;
 }
 
-tbody .description.origin {
+tbody .description.origin,
+.heading.origin,
+.content.origin {
   width: 321px;
   height: 150px;
 }
 
-tbody .description.origin > div {
+tbody .description.origin > div,
+.heading.origin > div,
+.content.origin > div {
   line-height: normal;
   max-height: 150px;
   overflow-y: auto;
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 tbody img.image {
@@ -1123,6 +1127,14 @@ tbody img.image {
   height: 150px;
   box-sizing: border-box;
   object-fit: contain;
+}
+
+tbody .heading.origin {
+  width: 250px;
+}
+
+tbody .content.origin {
+  width: 750px;
 }
 
 .btn__area {

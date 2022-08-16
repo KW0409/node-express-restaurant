@@ -535,8 +535,12 @@ const faqUtils = {
     const template = `
       <input type="hidden" class="id" value=${data.id}></input>
       <td class="sequence origin">${data.sequence}</td>
-      <td class="title origin">${encodeHTML(data.title)}</td>
-      <td class="content origin">${encodeHTML(data.content)}</td>
+      <td class="heading origin">
+        <div>${encodeHTML(data.heading)}</div>
+      </td>
+      <td class="content origin">
+        <div>${encodeHTML(data.content)}</div>
+      </td>
       <td class="btn__area origin">
         <div class="first__check-btn">
           <input class="btn update-btn" type="button" value="編輯">
@@ -552,9 +556,9 @@ const faqUtils = {
       <td class="sequence alt hide">
         <input class="alt__text" type="number" min="1" value=${data.sequence}>
       </td>
-      <td class="title alt hide">
+      <td class="heading alt hide">
         <textarea class="alt__text" rows="1">${encodeHTML(
-          data.title
+          data.heading
         )}</textarea>
       </td>
       <td class="content alt hide">
@@ -586,7 +590,7 @@ const faqUtils = {
         {
           id: 1,
           sequence: 1,
-          title: "如何辦理退換貨？",
+          heading: "如何辦理退換貨？",
           content: `
           收到商品後如果有瑕疵或是缺件寄錯商品請於七天內提出，超過七天一律不受理。
           很抱歉讓您收到有問題的商品，如您的商品有問題，為加速處理流程，您可以拍照上傳至信箱，並留下您的問題說明，客服人員將會盡力幫您幫處理。`,
