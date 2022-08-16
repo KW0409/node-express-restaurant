@@ -1149,6 +1149,51 @@ tbody .dish-price.origin {
   width: 95px;
 }
 
+#order tbody .order-num {
+  width: 220px;
+}
+
+#order tbody .created-at {
+  width: 200px;
+}
+
+#order tbody .orderer {
+  width: 220px;
+}
+
+#order tbody .price {
+  width: 265px;
+}
+
+#member tbody .name {
+  width: 100px;
+}
+
+#member tbody .username {
+  width: 180px;
+}
+
+#member tbody .username,
+#member tbody .email {
+  word-break: break-word;
+}
+
+#member .username > div,
+#member .email > div {
+  line-height: normal;
+  max-height: 70px;
+  overflow-y: auto;
+  white-space: pre-line;
+}
+
+#member tbody .email {
+  width: 300px;
+}
+
+#member tbody .total-spend {
+  width: 230px;
+}
+
 .btn__area {
   padding: 20px 15px;
 }

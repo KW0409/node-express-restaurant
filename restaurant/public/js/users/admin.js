@@ -872,14 +872,18 @@ const memberUtils = {
     let userState = data.user_auth ? "一般會員" : "停權會員";
     const template = `
       <input type="hidden" class="id" value=${data.id}></input>
-      <td class="sequence origin">${encodeHTML(data.name)}</td>
-      <td class="sequence origin">${encodeHTML(data.username)}</td>
-      <td class="rank origin">${encodeHTML(data.email)}</td>
-      <td class="prize origin">${data.order.totalNum}</td>
-      <td class="prize origin">NT$.${data.order.totalPrice}</td>
-      <td class="prize origin">${userState}</td>
+      <td class="name">${encodeHTML(data.name)}</td>
+      <td class="username">
+        <div>${encodeHTML(data.username)}</div>
+      </td>
+      <td class="email">
+        <div>${encodeHTML(data.email)}</div>
+      </td>
+      <td class="total-order">${data.order.totalNum}</td>
+      <td class="total-spend">NT$.${data.order.totalSpend}</td>
+      <td class="state">${userState}</td>
       <td class="btn__area">
-        <input type="button" value="查看詳情" onclick="location.href='/admin/member-detail'">
+        <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/member-detail'">
       </td>`;
     // TODO: 確認上面的 onclick 超連結寫法是否正確
     return template;
@@ -900,7 +904,7 @@ const memberUtils = {
           user_auth: 0,
           order: {
             totalNum: 20,
-            totalPrice: 5000,
+            totalSpend: 5000,
           },
         },
       ];
@@ -1003,13 +1007,13 @@ const orderUtils = {
   template: (data) => {
     const template = `
       <input type="hidden" class="id" value=${data.id}></input>
-      <td class="sequence origin">${encodeHTML(data.state)}</td>
-      <td class="sequence origin">${data.num}</td>
-      <td class="rank origin">${encodeHTML(data.createdAt)}</td>
-      <td class="prize origin">${encodeHTML(data.user.name)}</td>
-      <td class="prize origin">NT$.${data.price}</td>
+      <td class="state">${encodeHTML(data.state)}</td>
+      <td class="order-num">${data.num}</td>
+      <td class="created-at">${encodeHTML(data.createdAt)}</td>
+      <td class="orderer">${encodeHTML(data.user.name)}</td>
+      <td class="price">NT$.${data.price}</td>
       <td class="btn__area">
-        <input type="button" value="查看詳情" onclick="location.href='/admin/order-detail'">
+        <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/order-detail'">
       </td>`;
     // TODO: 確認上面的 onclick 超連結寫法是否正確
     return template;
