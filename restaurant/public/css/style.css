@@ -991,14 +991,13 @@ h3.error {
 .tab__area {
   width: 1250px;
   margin: 0 auto;
-  padding-left: 25px;
+  padding: 0 25px;
   padding-bottom: 25px;
   text-align: left;
 }
 
 .tab__area.user {
-  width: 80%;
-  max-width: 850px;
+  width: 750px;
 }
 
 .tab__list {
@@ -1087,6 +1086,22 @@ tbody tr:nth-child(odd) {
   background: #e5e5e5e6;
 }
 
+#ordercontent tbody .order-num {
+  width: 150px;
+}
+
+#ordercontent tbody .created-at {
+  width: 180px;
+}
+
+#ordercontent tbody .price {
+  width: 135px;
+}
+
+#ordercontent tbody .state {
+  width: 95px;
+}
+
 tbody .prize.origin {
   width: 256px;
 }
@@ -1115,7 +1130,8 @@ tbody img.image {
 }
 
 .btn__area .btn,
-.add-btn {
+.add-btn,
+.link-btn {
   color: #ffffff;
   padding: 5px 15px;
   border-width: 1px;
@@ -1124,9 +1140,14 @@ tbody img.image {
 }
 
 .btn__area .btn:hover,
-.add-btn:hover {
+.add-btn:hover,
+.link-btn:hover {
   opacity: 0.7;
   cursor: pointer;
+}
+
+.btn__area .link-btn {
+  background: #357933;
 }
 
 .btn__area .update-btn {

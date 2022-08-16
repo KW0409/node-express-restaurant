@@ -467,12 +467,12 @@ const orderUtils = {
   template: (data) => {
     const htmlTemplate = `
       <input type="hidden" class="id" value=${data.id}></input>
-      <td class="sequence origin">${data.num}</td>
-      <td class="sequence origin">${encodeHTML(data.createdAt)}</td>
-      <td class="rank origin">${encodeHTML(data.price)}</td>
-      <td class="prize origin">${encodeHTML(data.state)}</td>
+      <td class="order-num">${data.num}</td>
+      <td class="created-at">${encodeHTML(data.createdAt)}</td>
+      <td class="price">${encodeHTML(data.price)}</td>
+      <td class="state">${encodeHTML(data.state)}</td>
       <td class="btn__area">
-        <input type="button" value="查看詳情" onclick="location.href='/user/order-detail'">
+        <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/user/order-detail'">
       </td>`;
     // TODO: 確認上面的 onclick 超連結寫法是否正確
     return htmlTemplate;
