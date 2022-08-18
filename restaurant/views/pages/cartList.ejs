@@ -8,12 +8,8 @@
     <%- include('../template/navbar') %>
 
     <div class="wrapper admin__wrapper">
-      <div class="order-data-container">
-        <div class="title">
-          <div>
-            <div>購物清單</div>
-          </div>
-        </div>
+      <div class="cart-list data-container">
+        <div class="title">購物清單</div>
         <div class="content">
           <table>
             <thead>
@@ -23,6 +19,7 @@
                 <th>價格</th>
                 <th>數量</th>
                 <th>小計</th>
+                <th></th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -30,42 +27,38 @@
         </div>
       </div>
 
-      <div class="order-bill-container">
+      <div class="cart-list bill-container">
         <div class="title">帳單資訊</div>
         <div class="content">
           <div class="user-data name">
-            姓名：<input type="text"></input>
+            姓名<span>*</span><input type="text"></input>
           </div>
           <div class="user-data phone">
-            電話：<input type="text"></input>
+            電話<span>*</span><input type="text"></input>
           </div>
           <div class="user-data address">
-            地址：<input type="text"></input>
+            地址<span>*</span><input type="text"></input>
           </div>
           <div class="user-data email">
-            信箱：<input type="text"></input>
+            信箱<span>*</span><input type="text"></input>
           </div>
 
           <div class="btn__area">
-            <div class="handle__update-btn origin">
-              <!-- TODO: -->
-              <input
-                class="redirect-btn"
-                type="button"
-                value="繼續購物"
-                onclick="location.href='###'"
-              />
-            </div>
+            <!-- TODO: -->
+            <input
+              class="redirect-btn"
+              type="button"
+              value="繼續購物"
+              onclick="location.href='###'"
+            />
 
-            <div class="handle__update-btn origin">
-              <!-- TODO: -->
-              <input
-                class="confirm-btn"
-                type="button"
-                value="確認送出"
-                onclick="location.href='###'"
-              />
-            </div>
+            <!-- TODO: -->
+            <input
+              class="confirm-btn"
+              type="button"
+              value="確認送出"
+              onclick="location.href='###'"
+            />
           </div>
         </div>
       </div>

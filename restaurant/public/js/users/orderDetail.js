@@ -467,13 +467,13 @@ const orderUtils = {
   template: (data) => {
     const htmlTemplate = `
       <input type="hidden" class="id" value=${data.id}></input>
-      <td class="image origin">
+      <td class="image">
         <img class="image" src=${encodeHTML(data.image)}>
       </td>
-      <td class="dishname origin">${encodeHTML(data.dishname)}</td>
-      <td class="price origin">${encodeHTML(data.price)}</td>
-      <td class="count origin">${data.count}</td>
-      <td class="total-price origin">${encodeHTML(data.totalPrice)}</td>
+      <td class="dishname">${encodeHTML(data.dishname)}</td>
+      <td class="price">${encodeHTML(data.price)}</td>
+      <td class="count">${data.count}</td>
+      <td class="total-price">${encodeHTML(data.totalPrice)}</td>
       `;
     // TODO: 確認上面的 onclick 超連結寫法是否正確
     return htmlTemplate;
@@ -509,106 +509,6 @@ const orderUtils = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const contentArea = document.querySelector(
-    ".order-data-container > .content"
-  );
+  const contentArea = document.querySelector(".data-container > .content");
   orderUtils.getContent(contentArea);
 });
-
-/* 各個表格的 func */
-const eventListenerUtils = {
-  /* 會員資料項目的功能 */
-  data: (tabContentArea) => {
-    tabContentArea.addEventListener("click", (e) => {
-      // 編輯功能
-      if (e.target.classList.contains("update-btn")) {
-        const targetTabContent = e.target.closest(".tab-content");
-        const OriginContents = targetTabContent.querySelectorAll(".origin");
-        const AltInput = targetTabContent.querySelectorAll(".alt");
-
-        for (let i = 0; i < OriginContents.length; i++) {
-          OriginContents[i].classList.add("hide");
-          AltInput[i].classList.remove("hide");
-        }
-      }
-
-      // 取消編輯功能
-      if (e.target.classList.contains("cancel-btn")) {
-        const targetTabContent = e.target.closest(".tab-content");
-        const OriginContents = targetTabContent.querySelectorAll(".origin");
-        const AltInput = targetTabContent.querySelectorAll(".alt");
-        for (let i = 0; i < OriginContents.length; i++) {
-          OriginContents[i].classList.remove("hide");
-          AltInput[i].classList.add("hide");
-        }
-      }
-
-      let classNameArr = ["name", "address", "phone", "email"];
-      // 儲存功能
-      if (e.target.classList.contains("store-btn")) {
-        const targetTabContent = e.target.closest(".tab-content");
-        const data = { username: "user00" }; // TODO: 這邊只是暫時這樣寫，以免在下面 dataUtils.template(data) 出錯
-        for (const className of classNameArr) {
-          data[className] = targetTabContent.querySelector(
-            `.${className} .alt__text`
-          ).value;
-        }
-
-        dataUtils
-          .updateAPI(data)
-          .then(() => {
-            targetTabContent.innerHTML = dataUtils.template(data);
-          })
-          .catch((err) => {
-            // TODO: 這邊只是暫時這樣寫，之後要改成 try/catch，並加上比較好的錯誤處理
-            console.log(err);
-            targetTabContent.innerHTML = dataUtils.template(data);
-          });
-      }
-    });
-  },
-
-  /* 訂單記錄的功能(coming soon....) */
-  order: (tabContentArea) => {
-    tabContentArea.addEventListener("click", (e) => {
-      // 編輯功能
-      if (e.target.classList.contains("update-btn")) {
-        documentUtils.tableUpdate(e);
-      }
-
-      // 取消編輯功能
-      if (e.target.classList.contains("cancel-btn")) {
-        documentUtils.tableCancel(e);
-      }
-
-      // 刪除功能
-      if (e.target.classList.contains("delete-btn")) {
-        documentUtils.tableDeleteRow(e, "lottery");
-      }
-
-      const classNameArr = [
-        "sequence",
-        "rank",
-        "prize",
-        "description",
-        "image",
-        "amount",
-        "percentage",
-      ];
-      // 儲存功能
-      if (e.target.classList.contains("store-btn")) {
-        documentUtils.tableStore(e, "lottery", classNameArr);
-      }
-
-      // 新增功能(只新增欄位)
-      if (e.target.classList.contains("add-btn")) {
-        documentUtils.tableAddRow(e, "lottery", classNameArr);
-      }
-
-      // 新增功能(新增到資料庫)
-      if (e.target.classList.contains("handle-add")) {
-        documentUtils.tableAddData(e, "lottery", classNameArr);
-      }
-    });
-  },
-};

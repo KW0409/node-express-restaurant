@@ -467,13 +467,14 @@ const orderUtils = {
   template: (data) => {
     const htmlTemplate = `
       <input type="hidden" class="id" value=${data.id}></input>
-      <td class="image origin">
+      <td class="image">
         <img class="image" src=${encodeHTML(data.image)}>
       </td>
-      <td class="dishname origin">${encodeHTML(data.dishname)}</td>
-      <td class="price origin">${encodeHTML(data.price)}</td>
-      <td class="count origin">${data.count}</td>
-      <td class="total-price origin">${encodeHTML(data.totalPrice)}</td>
+      <td class="dishname">${encodeHTML(data.dishname)}</td>
+      <td class="price">${encodeHTML(data.price)}</td>
+      <td class="count"><input type="number" value="1"></td>
+      <td class="total-price">${encodeHTML(data.totalPrice)}</td>
+      <td class="btn-area"><input type="button" value="刪除"></td>
       `;
     // TODO: 確認上面的 onclick 超連結寫法是否正確
     return htmlTemplate;
@@ -492,7 +493,6 @@ const orderUtils = {
           image: "/css/lottery_pic/bg.png",
           dishname: "鮮嫩洋芋白丁佐莎莎",
           price: "$260",
-          count: 2,
           totalPrice: "$520",
         },
       ];
@@ -509,9 +509,7 @@ const orderUtils = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const contentArea = document.querySelector(
-    ".order-data-container > .content"
-  );
+  const contentArea = document.querySelector(".data-container > .content");
   orderUtils.getContent(contentArea);
 });
 

@@ -1272,3 +1272,143 @@ tbody td.alt.prize textarea {
   padding: 10px 20px;
   font-size: 18px;
 }
+
+/* orderDetail, cartList */
+.data-container,
+.bill-container {
+  width: 800px;
+  padding: 0 25px;
+  margin: 0 auto;
+}
+
+.data-container > .title,
+.bill-container > .title {
+  border-bottom: 1px solid #bcbcbc;
+  justify-content: space-between;
+}
+
+.order-detail .heading-info,
+.bill-container > .title,
+.cart-list.data-container > .title {
+  font-size: 17px;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.order-detail .heading-info > div + div {
+  margin-top: 10px;
+}
+
+.order-detail .heading-info > .order-state {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #489846;
+}
+
+.order-detail.data-container .btn__area {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 15px;
+  padding: 0;
+}
+
+.data-container .content {
+  margin-bottom: 120px;
+}
+
+.data-container tbody td.image {
+  padding-left: 25px;
+  padding-right: 45px;
+}
+
+.data-container tbody img.image {
+  width: 200px;
+  height: 100px;
+}
+
+.data-container tbody .dishname {
+  width: 200px;
+}
+
+.data-container tbody .total-price {
+  width: 90px;
+}
+
+.bill-container > .title,
+.cart-list.data-container > .title {
+  font-size: 20px;
+}
+
+.bill-container .content {
+  padding-left: 35px;
+}
+
+.bill-container .btn__area {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 40px;
+}
+
+.bill-container .btn__area > input {
+  padding: 10px 25px;
+  color: #3f633c;
+  background: #f1fff2;
+  border: solid 1px #3f633c;
+  border-radius: 3px;
+  transition: all 0.1s;
+}
+
+.bill-container .btn__area > input:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* cartList */
+.cart-list.data-container,
+.cart-list.bill-container {
+  width: 900px;
+}
+
+.cart-list.data-container tbody .count > input {
+  width: 40px;
+}
+
+.cart-list.data-container tbody img.image {
+  width: 225px;
+}
+
+.cart-list.data-container tbody .btn-area {
+  padding: 15px;
+}
+
+.cart-list.data-container tbody .btn-area > input {
+  padding: 3px 7px;
+  border: 1px solid red;
+  border-radius: 3px;
+  color: red;
+  background: white;
+}
+
+.cart-list.data-container tbody .btn-area > input:hover {
+  cursor: pointer;
+  color: white;
+  background: red;
+}
+
+.cart-list.bill-container .user-data > span {
+  color: red;
+}
+
+.cart-list.bill-container .user-data > input {
+  margin-left: 10px;
+  width: 550px;
+  height: 25px;
+  border: solid 1px #e2e2e2;
+  border-radius: 3px;
+}
+
+.cart-list.bill-container .btn__area {
+  justify-content: space-between;
+  padding-top: 65px;
+}

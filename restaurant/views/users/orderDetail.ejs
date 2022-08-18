@@ -13,12 +13,13 @@
         ><span class="title__text admin">訂單明細</span>
       </div>
 
-      <div class="order-data-container">
+      <div class="order-detail data-container">
+        <!-- TODO: 這邊之後要變成傳資料進來，資料還要用來判斷 btn__area 要呈現什麼按鈕 -->
         <div class="title">
-          <div>
+          <div class="heading-info">
             <div>訂單日期：2022-08-05 14:23:51</div>
             <div>訂單編號：123321</div>
-            <div>待處理</div>
+            <div class="order-state">訂單狀態：待處理</div>
           </div>
           <div class="btn__area">
             <div class="handle__update-btn origin">
@@ -26,7 +27,7 @@
               <input class="btn cancel-btn" type="button" value="取消訂單" />
             </div>
 
-            <div class="handle__update-btn origin">
+            <div class="handle__update-btn origin hide">
               <input class="btn update-btn" type="button" value="已完成" />
               <input class="btn cancel-btn" type="button" value="取消訂單" />
             </div>
@@ -48,7 +49,7 @@
         </div>
       </div>
 
-      <div class="order-bill-container">
+      <div class="order-detail bill-container">
         <div class="title">帳單資訊</div>
         <div class="content">
           <div class="user-data name">
@@ -65,14 +66,12 @@
           </div>
 
           <div class="btn__area">
-            <div class="handle__update-btn origin">
-              <input
-                class="redirect-btn"
-                type="button"
-                value="回訂單列表"
-                onclick="location.href='/admin/order-detail'"
-              />
-            </div>
+            <input
+              class="redirect-btn"
+              type="button"
+              value="回訂單列表"
+              onclick="location.href='/admin/order-detail'"
+            />
           </div>
         </div>
       </div>
