@@ -981,7 +981,7 @@ h3.error {
   text-decoration: underline;
 }
 
-/* admin, user */
+/* admin, user, memberDetail */
 .admin__wrapper {
   min-height: calc(100vh - 150px);
   margin-bottom: 200px;
@@ -1086,19 +1086,23 @@ tbody tr:nth-child(odd) {
   background: #e5e5e5e6;
 }
 
-#ordercontent tbody .order-num {
+#ordercontent tbody .order-num,
+.member-detail-wrapper tbody .order-num {
   width: 150px;
 }
 
-#ordercontent tbody .created-at {
+#ordercontent tbody .created-at,
+.member-detail-wrapper tbody .created-at {
   width: 180px;
 }
 
-#ordercontent tbody .price {
+#ordercontent tbody .price,
+.member-detail-wrapper tbody .price {
   width: 135px;
 }
 
-#ordercontent tbody .state {
+#ordercontent tbody .state,
+.member-detail-wrapper tbody .state {
   width: 95px;
 }
 
@@ -1273,7 +1277,7 @@ tbody td.alt.prize textarea {
   font-size: 18px;
 }
 
-/* orderDetail, cartList */
+/* orderDetail, cartList, memberDetail */
 .data-container,
 .bill-container {
   width: 800px;
@@ -1349,7 +1353,8 @@ tbody td.alt.prize textarea {
   padding-top: 40px;
 }
 
-.bill-container .btn__area > input {
+.bill-container .btn__area > input,
+.member-detail-wrapper > .btn__area > input {
   padding: 10px 25px;
   color: #3f633c;
   background: #f1fff2;
@@ -1358,7 +1363,8 @@ tbody td.alt.prize textarea {
   transition: all 0.1s;
 }
 
-.bill-container .btn__area > input:hover {
+.bill-container .btn__area > input:hover,
+.member-detail-wrapper > .btn__area > input:hover {
   transform: scale(1.05);
   cursor: pointer;
   font-weight: bold;
@@ -1411,4 +1417,34 @@ tbody td.alt.prize textarea {
 .cart-list.bill-container .btn__area {
   justify-content: space-between;
   padding-top: 65px;
+}
+
+/* memberDetail */
+.member-detail-wrapper {
+  width: 750px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+.member-detail-wrapper > .btn__area {
+  padding: 0;
+  padding-bottom: 35px;
+}
+
+.member-data-container {
+  padding: 55px 45px;
+  margin-bottom: 35px;
+  background: rgb(237, 241, 244);
+  position: relative;
+}
+
+.member-data-container select {
+  width: 95px;
+}
+
+.member-data-container > .btn__area {
+  padding: 0;
+  position: absolute;
+  top: 25px;
+  right: 25px;
 }
