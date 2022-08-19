@@ -21,67 +21,12 @@ const documentUtils = {
 
   // 塞入表格的內容
   getTabContent: (targetTab, newTabContent) => {
-    if (targetTab === "lottery") {
-      if (tabUtils[targetTab].tableTitleArr) {
-        newTabContent.innerHTML = documentUtils.tableTemplate;
-        let titleArr = tabUtils[targetTab].tableTitleArr;
-        documentUtils.getTableTitle(newTabContent, titleArr);
-      }
-      tabUtils[targetTab].getContent(newTabContent);
-      /*
-      const titleArr = [
-        "順序",
-        "獎項",
-        "獎品名稱",
-        "說明",
-        "圖片",
-        "名額",
-        "機率",
-        "修改",
-      ];
+    if (tabUtils[targetTab].tableTitleArr) {
+      newTabContent.innerHTML = documentUtils.tableTemplate;
+      let titleArr = tabUtils[targetTab].tableTitleArr;
       documentUtils.getTableTitle(newTabContent, titleArr);
-      tabUtils.lottery.getContent(newTabContent);
-      */
-    } else if (targetTab === "faq") {
-      const titleArr = ["順序", "標題", "內容", "修改"];
-      documentUtils.getTableTitle(newTabContent, titleArr);
-      tabUtils.faq.getContent(newTabContent);
-    } else if (targetTab === "menu") {
-      const titleArr = [
-        "順序",
-        "菜品名稱",
-        "說明",
-        "圖片",
-        "價格",
-        "狀態",
-        "修改",
-      ];
-      documentUtils.getTableTitle(newTabContent, titleArr);
-      tabUtils.menu.getContent(newTabContent);
-    } else if (targetTab === "member") {
-      const titleArr = [
-        "姓名",
-        "帳號",
-        "Email",
-        "訂購次數",
-        "消費總額",
-        "狀態",
-        "管理",
-      ];
-      documentUtils.getTableTitle(newTabContent, titleArr);
-      tabUtils.member.getContent(newTabContent);
-    } else if (targetTab === "order") {
-      const titleArr = [
-        "訂單狀態",
-        "訂單編號",
-        "訂單日期",
-        "訂購人",
-        "金額",
-        "管理",
-      ];
-      documentUtils.getTableTitle(newTabContent, titleArr);
-      tabUtils.order.getContent(newTabContent);
     }
+    tabUtils[targetTab].getContent(newTabContent);
   },
 
   // 表格自動排序功能
@@ -149,26 +94,19 @@ const documentUtils = {
     return true;
   },
 
-  // 編輯表格功能
-  tableUpdate: (e) => {
-    const targetRow = e.target.closest("tr");
-    const targetContents = targetRow.querySelectorAll(".origin");
-    const targetAlt = targetRow.querySelectorAll(".alt");
+  // 編輯表格or取消編輯表格功能
+  dataUpdate: (target, action) => {
+    const originContents = target.querySelectorAll(".origin");
+    const altInput = target.querySelectorAll(".alt");
 
-    for (let i = 0; i < targetContents.length; i++) {
-      targetContents[i].classList.add("hide");
-      targetAlt[i].classList.remove("hide");
-    }
-  },
-
-  // 取消編輯表格功能
-  tableCancel: (e) => {
-    const targetRow = e.target.closest("tr");
-    const targetContents = targetRow.querySelectorAll(".origin");
-    const targetAlt = targetRow.querySelectorAll(".alt");
-    for (let i = 0; i < targetContents.length; i++) {
-      targetContents[i].classList.remove("hide");
-      targetAlt[i].classList.add("hide");
+    for (let i = 0; i < originContents.length; i++) {
+      if (action === "update") {
+        originContents[i].classList.add("hide");
+        altInput[i].classList.remove("hide");
+      } else if (action === "cancel") {
+        originContents[i].classList.remove("hide");
+        altInput[i].classList.add("hide");
+      }
     }
   },
 
@@ -557,6 +495,8 @@ const tabUtils = {
       }
     },
 
+    tableTitleArr: ["順序", "標題", "內容", "修改"],
+
     template: (data) => {
       const template = `
         <input type="hidden" class="id" value=${data.id}></input>
@@ -718,6 +658,8 @@ const tabUtils = {
       }
     },
 
+    tableTitleArr: ["順序", "菜品名稱", "說明", "圖片", "價格", "狀態", "修改"],
+
     template: (data) => {
       const template = `
         <input type="hidden" class="id" value=${data.id}></input>
@@ -838,6 +780,16 @@ const tabUtils = {
       }
     },
 
+    tableTitleArr: [
+      "姓名",
+      "帳號",
+      "Email",
+      "訂購次數",
+      "消費總額",
+      "狀態",
+      "管理",
+    ],
+
     template: (data) => {
       let userState = data.user_auth ? "一般會員" : "停權會員";
       const template = `
@@ -883,8 +835,6 @@ const tabUtils = {
           tableRow.innerHTML = tabUtils.member.template(dataArr[i]);
           tbody.appendChild(tableRow);
         }
-        // 新增完成後再將表格排序
-        documentUtils.tableArrange(newTabContent);
       } catch (err) {
         console.log(err);
       }
@@ -915,6 +865,15 @@ const tabUtils = {
         throw err;
       }
     },
+
+    tableTitleArr: [
+      "訂單狀態",
+      "訂單編號",
+      "訂單日期",
+      "訂購人",
+      "金額",
+      "管理",
+    ],
 
     template: (data) => {
       const template = `
@@ -954,8 +913,6 @@ const tabUtils = {
           tableRow.innerHTML = tabUtils.order.template(dataArr[i]);
           tbody.appendChild(tableRow);
         }
-        // 新增完成後再將表格排序
-        documentUtils.tableArrange(newTabContent);
       } catch (err) {
         console.log(err);
       }
@@ -996,9 +953,10 @@ document.addEventListener("DOMContentLoaded", () => {
         newTabContent.classList.add("tab-content");
         newTabContent.setAttribute("id", targetTab);
         contentArea.appendChild(newTabContent);
-        // newTabContent.innerHTML = documentUtils.tableTemplate;
         documentUtils.getTabContent(targetTab, newTabContent);
-        eventListenerUtils[`${targetTab}`](newTabContent);
+        if (eventListenerUtils[`${targetTab}`]) {
+          eventListenerUtils[`${targetTab}`](newTabContent);
+        }
       }
     }
   });
@@ -1014,14 +972,15 @@ const eventListenerUtils = {
   /* 抽獎項目的功能 */
   lottery: (lotteryArea) => {
     lotteryArea.addEventListener("click", (e) => {
+      const targetRow = e.target.closest("tr");
       // 編輯功能
       if (e.target.classList.contains("update-btn")) {
-        documentUtils.tableUpdate(e);
+        documentUtils.dataUpdate(targetRow, "update");
       }
 
       // 取消編輯功能
       if (e.target.classList.contains("cancel-btn")) {
-        documentUtils.tableCancel(e);
+        documentUtils.dataUpdate(targetRow, "cancel");
       }
 
       // 刪除功能
@@ -1029,6 +988,7 @@ const eventListenerUtils = {
         documentUtils.tableDeleteRow(e, "lottery");
       }
 
+      // 儲存功能
       const classNameArr = [
         "sequence",
         "rank",
@@ -1038,7 +998,6 @@ const eventListenerUtils = {
         "amount",
         "percentage",
       ];
-      // 儲存功能
       if (e.target.classList.contains("store-btn")) {
         documentUtils.tableStore(e, "lottery", classNameArr);
       }
