@@ -22,6 +22,13 @@ const documentUtils = {
   // 塞入表格的內容
   getTabContent: (targetTab, newTabContent) => {
     if (targetTab === "lottery") {
+      if (tabUtils[targetTab].tableTitleArr) {
+        newTabContent.innerHTML = documentUtils.tableTemplate;
+        let titleArr = tabUtils[targetTab].tableTitleArr;
+        documentUtils.getTableTitle(newTabContent, titleArr);
+      }
+      tabUtils[targetTab].getContent(newTabContent);
+      /*
       const titleArr = [
         "順序",
         "獎項",
@@ -33,11 +40,12 @@ const documentUtils = {
         "修改",
       ];
       documentUtils.getTableTitle(newTabContent, titleArr);
-      lotteryUtils.getContent(newTabContent);
+      tabUtils.lottery.getContent(newTabContent);
+      */
     } else if (targetTab === "faq") {
       const titleArr = ["順序", "標題", "內容", "修改"];
       documentUtils.getTableTitle(newTabContent, titleArr);
-      faqUtils.getContent(newTabContent);
+      tabUtils.faq.getContent(newTabContent);
     } else if (targetTab === "menu") {
       const titleArr = [
         "順序",
@@ -49,7 +57,7 @@ const documentUtils = {
         "修改",
       ];
       documentUtils.getTableTitle(newTabContent, titleArr);
-      menuUtils.getContent(newTabContent);
+      tabUtils.menu.getContent(newTabContent);
     } else if (targetTab === "member") {
       const titleArr = [
         "姓名",
@@ -61,7 +69,7 @@ const documentUtils = {
         "管理",
       ];
       documentUtils.getTableTitle(newTabContent, titleArr);
-      memberUtils.getContent(newTabContent);
+      tabUtils.member.getContent(newTabContent);
     } else if (targetTab === "order") {
       const titleArr = [
         "訂單狀態",
@@ -72,7 +80,7 @@ const documentUtils = {
         "管理",
       ];
       documentUtils.getTableTitle(newTabContent, titleArr);
-      orderUtils.getContent(newTabContent);
+      tabUtils.order.getContent(newTabContent);
     }
   },
 
@@ -181,8 +189,8 @@ const documentUtils = {
     const targetTabContent = targetRow.closest(`.tab-content#${targetTab}`);
     if (targetTab === "lottery") {
       try {
-        await lotteryUtils.updateAPI(data.id, data);
-        targetRow.innerHTML = lotteryUtils.template(data);
+        await tabUtils.lottery.updateAPI(data.id, data);
+        targetRow.innerHTML = tabUtils.lottery.template(data);
         documentUtils.tableArrange(targetTabContent);
       } catch (err) {
         console.log(err);
@@ -211,7 +219,7 @@ const documentUtils = {
   tableDeleteData: async (targetTab, targetRow, id) => {
     if (targetTab === "lottery") {
       try {
-        await lotteryUtils.deleteAPI(id);
+        await tabUtils.lottery.deleteAPI(id);
         targetRow.parentNode.removeChild(targetRow);
       } catch (err) {
         console.log(err);
@@ -228,7 +236,7 @@ const documentUtils = {
     }
 
     if (targetTab === "lottery") {
-      newRow.innerHTML = lotteryUtils.template(data);
+      newRow.innerHTML = tabUtils.lottery.template(data);
     }
     const targetTabTbody = e.target.parentNode.querySelector("tbody");
     targetTabTbody.appendChild(newRow);
@@ -259,8 +267,8 @@ const documentUtils = {
     const targetTabContent = targetRow.closest(`.tab-content#${targetTab}`);
     if (targetTab === "lottery") {
       try {
-        data.id = await lotteryUtils.addAPI(data);
-        targetRow.innerHTML = lotteryUtils.template(data);
+        data.id = await tabUtils.lottery.addAPI(data);
+        targetRow.innerHTML = tabUtils.lottery.template(data);
         documentUtils.tableArrange(targetTabContent);
       } catch (err) {
         console.log(err);
@@ -279,774 +287,679 @@ function encodeHTML(str) {
     .replace(/"/g, "&quot;");
 }
 
-/* 抽獎項目的 func */
-const lotteryUtils = {
-  adminURL: "/admin-lottery",
+const tabUtils = {
+  /* 抽獎項目的 func */
+  lottery: {
+    adminURL: "/admin-lottery",
 
-  getAPI: async () => {
-    const response = await fetch(`${lotteryUtils.adminURL}-get`, {
-      method: "GET",
-    });
+    getAPI: async () => {
+      const response = await fetch(`${tabUtils.lottery.adminURL}-get`, {
+        method: "GET",
+      });
 
-    try {
-      if (!response.ok) {
-        // 因為要完全連不到 Server 才會到 .catch
-        // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
-        console.log("RESP(GET) NOT OK!");
-        throw new Error(await response.text());
+      try {
+        if (!response.ok) {
+          // 因為要完全連不到 Server 才會到 .catch
+          // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
+          console.log("RESP(GET) NOT OK!");
+          throw new Error(await response.text());
+        }
+
+        const dataArr = await response.json();
+        return dataArr;
+      } catch (err) {
+        alert("抽獎資料獲取失敗！");
+        throw err;
       }
+    },
 
-      const dataArr = await response.json();
-      return dataArr;
-    } catch (err) {
-      alert("抽獎資料獲取失敗！");
-      throw err;
-    }
-  },
-
-  updateAPI: async (id, data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-update/${id}`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(UPDATE) NOT OK!");
-        throw new Error(await response.text());
-      }
-    } catch (err) {
-      alert("抽獎資料儲存失敗！");
-      throw err;
-    }
-  },
-
-  deleteAPI: async (id) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-delete/${id}`, {
-      method: "GET",
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(DELETE) NOT OK!");
-        throw new Error(await response.text());
-      }
-    } catch (err) {
-      alert("抽獎資料刪除失敗");
-      throw err;
-    }
-  },
-
-  addAPI: async (data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-add`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(ADD) NOT OK!");
-        throw new Error(await response.text());
-      }
-      const lastId = await response.json();
-      return lastId;
-    } catch (err) {
-      alert("抽獎資料新增失敗！");
-      throw err;
-    }
-  },
-
-  template: (data) => {
-    const template = `
-      <input type="hidden" class="id" value=${data.id}></input>
-      <td class="sequence origin">${data.sequence}</td>
-      <td class="rank origin">${encodeHTML(data.rank)}</td>
-      <td class="prize origin">${encodeHTML(data.prize)}</td>
-      <td class="description origin">
-        <div>${encodeHTML(data.description)}</div>
-      </td>
-      <td class="image origin">
-        <img class="image" src=${encodeHTML(data.image)}>
-      </td>
-      <td class="amount origin">${data.amount} 位</td>
-      <td class="percentage origin">${data.percentage}%</td>
-      <td class="btn__area origin">
-        <div class="first__check-btn">
-          <input class="btn update-btn" type="button" value="編輯">
-          <input class="btn delete-btn delete__first-btn" type="button" value="刪除">
-        </div>
-
-        <div class="double__check-btn hide">
-          <input class="btn delete-btn delete__check-btn" type="button" value="確認">
-          <input class="btn delete-btn delete__cancel-btn" type="button" value="取消">
-        </div>
-      </td>
-
-      <td class="sequence alt hide">
-        <input class="alt__text" type="number" min="1" value=${data.sequence}>
-      </td>
-      <td class="rank alt hide">
-        <input class="alt__text" type="text" value=${encodeHTML(data.rank)}>
-      </td>
-      <td class="prize alt hide">
-        <textarea class="alt__text" rows="1">${encodeHTML(
-          data.prize
-        )}</textarea>
-      </td>
-      <td class="description alt hide">
-        <textarea class="alt__text" rows="3">${encodeHTML(
-          data.description
-        )}</textarea>
-      </td>
-      <td class="image alt hide">
-        <textarea class="alt__text" rows="1">${encodeHTML(
-          data.image
-        )}</textarea>
-      </td>
-      <td class="amount alt hide">
-        <input class="alt__text" type="number" min="1" value=${data.amount}>位
-      </td>
-      <td class="percentage alt hide">
-        <input class="alt__text" type="number" min="1" max="100" value=${
-          data.percentage
-        }>%
-      </td>
-      <td class="btn__area alt hide">
-        <div class="handle__store-btn">
-          <input class="btn store-btn" type="button" value="儲存">
-          <input class="btn cancel-btn" type="button" value="取消">
-        </div>
-
-        <div class="handle__add-btn hide">
-          <input class="btn handle-add add__check-btn" type="button" value="新增">
-          <input class="btn handle-add add__cancel-btn" type="button" value="取消">
-        </div>
-      </td>`;
-    return template;
-  },
-
-  getContent: async (newTabContent) => {
-    const tbody = newTabContent.querySelector("tbody");
-    try {
-      const dataArr = await lotteryUtils.getAPI();
-      for (let i = 0; i < dataArr.length; i++) {
-        const tableRow = document.createElement("tr");
-        tableRow.innerHTML = lotteryUtils.template(dataArr[i]);
-        tbody.appendChild(tableRow);
-      }
-      // 新增完成後再將表格排序
-      documentUtils.tableArrange(newTabContent);
-    } catch (err) {
-      console.log(err);
-    }
-  },
-};
-
-/* 常見問題的 func */
-const faqUtils = {
-  adminURL: "/admin-lottery",
-
-  getAPI: async () => {
-    const response = await fetch(`${lotteryUtils.adminURL}-get`, {
-      method: "GET",
-    });
-
-    try {
-      if (!response.ok) {
-        // 因為要完全連不到 Server 才會到 .catch
-        // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
-        console.log("RESP(GET) NOT OK!");
-        throw new Error(await response.text());
-      }
-
-      const dataArr = await response.json();
-      return dataArr;
-    } catch (err) {
-      alert("抽獎資料獲取失敗！");
-      throw err;
-    }
-  },
-
-  updateAPI: async (id, data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-update/${id}`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(UPDATE) NOT OK!");
-        throw new Error(await response.text());
-      }
-    } catch (err) {
-      alert("抽獎資料儲存失敗！");
-      throw err;
-    }
-  },
-
-  deleteAPI: async (id) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-delete/${id}`, {
-      method: "GET",
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(DELETE) NOT OK!");
-        throw new Error(await response.text());
-      }
-    } catch (err) {
-      alert("抽獎資料刪除失敗");
-      throw err;
-    }
-  },
-
-  addAPI: async (data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-add`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(ADD) NOT OK!");
-        throw new Error(await response.text());
-      }
-      const lastId = await response.json();
-      return lastId;
-    } catch (err) {
-      alert("抽獎資料新增失敗！");
-      throw err;
-    }
-  },
-
-  template: (data) => {
-    const template = `
-      <input type="hidden" class="id" value=${data.id}></input>
-      <td class="sequence origin">${data.sequence}</td>
-      <td class="heading origin">
-        <div>${encodeHTML(data.heading)}</div>
-      </td>
-      <td class="content origin">
-        <div>${encodeHTML(data.content)}</div>
-      </td>
-      <td class="btn__area origin">
-        <div class="first__check-btn">
-          <input class="btn update-btn" type="button" value="編輯">
-          <input class="btn delete-btn delete__first-btn" type="button" value="刪除">
-        </div>
-
-        <div class="double__check-btn hide">
-          <input class="btn delete-btn delete__check-btn" type="button" value="確認">
-          <input class="btn delete-btn delete__cancel-btn" type="button" value="取消">
-        </div>
-      </td>
-      
-      <td class="sequence alt hide">
-        <input class="alt__text" type="number" min="1" value=${data.sequence}>
-      </td>
-      <td class="heading alt hide">
-        <textarea class="alt__text" rows="1">${encodeHTML(
-          data.heading
-        )}</textarea>
-      </td>
-      <td class="content alt hide">
-        <textarea class="alt__text" rows="3">${encodeHTML(
-          data.content
-        )}</textarea>
-      </td>
-      <td class="btn__area alt hide">
-        <div class="handle__store-btn">
-          <input class="btn store-btn" type="button" value="儲存">
-          <input class="btn cancel-btn" type="button" value="取消">
-        </div>
-
-        <div class="handle__add-btn hide">
-          <input class="btn handle-add add__check-btn" type="button" value="新增">
-          <input class="btn handle-add add__cancel-btn" type="button" value="取消">
-        </div>
-      </td>`;
-    return template;
-  },
-
-  getContent: async (newTabContent) => {
-    const tbody = newTabContent.querySelector("tbody");
-    try {
-      // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
-      // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
-      // const dataArr = await faqUtils.getAPI();
-      const dataArr = [
+    updateAPI: async (id, data) => {
+      const response = await fetch(
+        `${tabUtils.lottery.adminURL}-update/${id}`,
         {
-          id: 1,
-          sequence: 1,
-          heading: "如何辦理退換貨？",
-          content: `
-          收到商品後如果有瑕疵或是缺件寄錯商品請於七天內提出，超過七天一律不受理。
-          很抱歉讓您收到有問題的商品，如您的商品有問題，為加速處理流程，您可以拍照上傳至信箱，並留下您的問題說明，客服人員將會盡力幫您幫處理。`,
-        },
-      ];
-      for (let i = 0; i < dataArr.length; i++) {
-        const tableRow = document.createElement("tr");
-        tableRow.innerHTML = faqUtils.template(dataArr[i]);
-        tbody.appendChild(tableRow);
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: new Headers({
+            "Content-Type": "application/json",
+          }),
+        }
+      );
+
+      try {
+        if (!response.ok) {
+          console.log("RESP(UPDATE) NOT OK!");
+          throw new Error(await response.text());
+        }
+      } catch (err) {
+        alert("抽獎資料儲存失敗！");
+        throw err;
       }
-      // 新增完成後再將表格排序
-      documentUtils.tableArrange(newTabContent);
-    } catch (err) {
-      console.log(err);
-    }
-  },
-};
+    },
 
-/* 菜單上傳的 func */
-const menuUtils = {
-  adminURL: "/admin-lottery",
-
-  getAPI: async () => {
-    const response = await fetch(`${lotteryUtils.adminURL}-get`, {
-      method: "GET",
-    });
-
-    try {
-      if (!response.ok) {
-        // 因為要完全連不到 Server 才會到 .catch
-        // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
-        console.log("RESP(GET) NOT OK!");
-        throw new Error(await response.text());
-      }
-
-      const dataArr = await response.json();
-      return dataArr;
-    } catch (err) {
-      alert("抽獎資料獲取失敗！");
-      throw err;
-    }
-  },
-
-  updateAPI: async (id, data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-update/${id}`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(UPDATE) NOT OK!");
-        throw new Error(await response.text());
-      }
-    } catch (err) {
-      alert("抽獎資料儲存失敗！");
-      throw err;
-    }
-  },
-
-  deleteAPI: async (id) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-delete/${id}`, {
-      method: "GET",
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(DELETE) NOT OK!");
-        throw new Error(await response.text());
-      }
-    } catch (err) {
-      alert("抽獎資料刪除失敗");
-      throw err;
-    }
-  },
-
-  addAPI: async (data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-add`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(ADD) NOT OK!");
-        throw new Error(await response.text());
-      }
-      const lastId = await response.json();
-      return lastId;
-    } catch (err) {
-      alert("抽獎資料新增失敗！");
-      throw err;
-    }
-  },
-
-  template: (data) => {
-    const template = `
-      <input type="hidden" class="id" value=${data.id}></input>
-      <td class="sequence origin">${data.sequence}</td>
-      <td class="dishname origin">${encodeHTML(data.name)}</td>
-      <td class="description dish-description origin">
-        <div>${encodeHTML(data.description)}</div>
-      </td>
-      <td class="image origin">
-        <img class="image" src=${encodeHTML(data.image)}>
-      </td>
-      <td class="price dish-price origin">NT.${data.price}</td>
-      <td class="state origin">${data.state}</td>
-      <td class="btn__area origin">
-        <div class="first__check-btn">
-          <input class="btn update-btn" type="button" value="編輯">
-          <input class="btn delete-btn delete__first-btn" type="button" value="刪除">
-        </div>
-
-        <div class="double__check-btn hide">
-          <input class="btn delete-btn delete__check-btn" type="button" value="確認">
-          <input class="btn delete-btn delete__cancel-btn" type="button" value="取消">
-        </div>
-      </td>
-      
-      <td class="sequence alt hide">
-        <input class="alt__text" type="number" min="1" value=${data.sequence}>
-      </td>
-      <td class="dishname alt hide">
-        <textarea class="alt__text" rows="1">${encodeHTML(data.name)}</textarea>
-      </td>
-      <td class="description alt hide">
-        <textarea class="alt__text" rows="3">${encodeHTML(
-          data.description
-        )}</textarea>
-      </td>
-      <td class="image alt hide">
-        <textarea class="alt__text" rows="1">${encodeHTML(
-          data.image
-        )}</textarea>
-      </td>
-      <td class="price alt hide">
-        <input class="alt__text" type="number" min="1" value=${data.price}>
-      </td>
-      <td class="state alt hide">
-        <input class="alt__text" type="text" value=${data.state}>
-      </td>
-      <td class="btn__area alt hide">
-        <div class="handle__store-btn">
-          <input class="btn store-btn" type="button" value="儲存">
-          <input class="btn cancel-btn" type="button" value="取消">
-        </div>
-
-        <div class="handle__add-btn hide">
-          <input class="btn handle-add add__check-btn" type="button" value="新增">
-          <input class="btn handle-add add__cancel-btn" type="button" value="取消">
-        </div>
-      </td>`;
-    return template;
-  },
-
-  getContent: async (newTabContent) => {
-    const tbody = newTabContent.querySelector("tbody");
-    try {
-      // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
-      // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
-      // const dataArr = await menuUtils.getAPI();
-      const dataArr = [
+    deleteAPI: async (id) => {
+      const response = await fetch(
+        `${tabUtils.lottery.adminURL}-delete/${id}`,
         {
-          id: 1,
-          sequence: 1,
-          name: "鮮燉洋芋白丁佐莎莎",
-          description: `
-          收到商品後如果有瑕疵或是缺件寄錯商品請於七天內提出，超過七天一律不受理。
-          很抱歉讓您收到有問題的商品，如您的商品有問題，為加速處理流程，您可以拍照上傳至信箱，並留下您的問題說明，客服人員將會盡力幫您幫處理。`,
-          image: "/css/lottery_pic/bg.png",
-          price: 200,
-          state: "供應中",
-        },
-      ];
-      for (let i = 0; i < dataArr.length; i++) {
-        const tableRow = document.createElement("tr");
-        tableRow.innerHTML = menuUtils.template(dataArr[i]);
-        tbody.appendChild(tableRow);
+          method: "GET",
+        }
+      );
+
+      try {
+        if (!response.ok) {
+          console.log("RESP(DELETE) NOT OK!");
+          throw new Error(await response.text());
+        }
+      } catch (err) {
+        alert("抽獎資料刪除失敗");
+        throw err;
       }
-      // 新增完成後再將表格排序
-      documentUtils.tableArrange(newTabContent);
-    } catch (err) {
-      console.log(err);
-    }
-  },
-};
+    },
 
-/* 會員管理的 func */
-const memberUtils = {
-  adminURL: "/admin-lottery",
+    addAPI: async (data) => {
+      const response = await fetch(`${tabUtils.lottery.adminURL}-add`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      });
 
-  getAPI: async () => {
-    const response = await fetch(`${lotteryUtils.adminURL}-get`, {
-      method: "GET",
-    });
-
-    try {
-      if (!response.ok) {
-        // 因為要完全連不到 Server 才會到 .catch
-        // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
-        console.log("RESP(GET) NOT OK!");
-        throw new Error(await response.text());
+      try {
+        if (!response.ok) {
+          console.log("RESP(ADD) NOT OK!");
+          throw new Error(await response.text());
+        }
+        const lastId = await response.json();
+        return lastId;
+      } catch (err) {
+        alert("抽獎資料新增失敗！");
+        throw err;
       }
+    },
 
-      const dataArr = await response.json();
-      return dataArr;
-    } catch (err) {
-      alert("抽獎資料獲取失敗！");
-      throw err;
-    }
-  },
+    tableTitleArr: [
+      "順序",
+      "獎項",
+      "獎品名稱",
+      "說明",
+      "圖片",
+      "名額",
+      "機率",
+      "修改",
+    ],
 
-  updateAPI: async (id, data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-update/${id}`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
+    template: (data) => {
+      const template = `
+        <input type="hidden" class="id" value=${data.id}></input>
+        <td class="sequence origin">${data.sequence}</td>
+        <td class="rank origin">${encodeHTML(data.rank)}</td>
+        <td class="prize origin">${encodeHTML(data.prize)}</td>
+        <td class="description origin">
+          <div>${encodeHTML(data.description)}</div>
+        </td>
+        <td class="image origin">
+          <img class="image" src=${encodeHTML(data.image)}>
+        </td>
+        <td class="amount origin">${data.amount} 位</td>
+        <td class="percentage origin">${data.percentage}%</td>
+        <td class="btn__area origin">
+          <div class="first__check-btn">
+            <input class="btn update-btn" type="button" value="編輯">
+            <input class="btn delete-btn delete__first-btn" type="button" value="刪除">
+          </div>
+  
+          <div class="double__check-btn hide">
+            <input class="btn delete-btn delete__check-btn" type="button" value="確認">
+            <input class="btn delete-btn delete__cancel-btn" type="button" value="取消">
+          </div>
+        </td>
+  
+        <td class="sequence alt hide">
+          <input class="alt__text" type="number" min="1" value=${data.sequence}>
+        </td>
+        <td class="rank alt hide">
+          <input class="alt__text" type="text" value=${encodeHTML(data.rank)}>
+        </td>
+        <td class="prize alt hide">
+          <textarea class="alt__text" rows="1">${encodeHTML(
+            data.prize
+          )}</textarea>
+        </td>
+        <td class="description alt hide">
+          <textarea class="alt__text" rows="3">${encodeHTML(
+            data.description
+          )}</textarea>
+        </td>
+        <td class="image alt hide">
+          <textarea class="alt__text" rows="1">${encodeHTML(
+            data.image
+          )}</textarea>
+        </td>
+        <td class="amount alt hide">
+          <input class="alt__text" type="number" min="1" value=${data.amount}>位
+        </td>
+        <td class="percentage alt hide">
+          <input class="alt__text" type="number" min="1" max="100" value=${
+            data.percentage
+          }>%
+        </td>
+        <td class="btn__area alt hide">
+          <div class="handle__store-btn">
+            <input class="btn store-btn" type="button" value="儲存">
+            <input class="btn cancel-btn" type="button" value="取消">
+          </div>
+  
+          <div class="handle__add-btn hide">
+            <input class="btn handle-add add__check-btn" type="button" value="新增">
+            <input class="btn handle-add add__cancel-btn" type="button" value="取消">
+          </div>
+        </td>`;
+      return template;
+    },
 
-    try {
-      if (!response.ok) {
-        console.log("RESP(UPDATE) NOT OK!");
-        throw new Error(await response.text());
+    getContent: async (newTabContent) => {
+      const tbody = newTabContent.querySelector("tbody");
+      try {
+        const dataArr = await tabUtils.lottery.getAPI();
+        for (let i = 0; i < dataArr.length; i++) {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = tabUtils.lottery.template(dataArr[i]);
+          tbody.appendChild(tableRow);
+        }
+        // 新增完成後再將表格排序
+        documentUtils.tableArrange(newTabContent);
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      alert("抽獎資料儲存失敗！");
-      throw err;
-    }
+    },
   },
 
-  deleteAPI: async (id) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-delete/${id}`, {
-      method: "GET",
-    });
+  /* 常見問題的 func */
+  faq: {
+    adminURL: "/admin-lottery",
 
-    try {
-      if (!response.ok) {
-        console.log("RESP(DELETE) NOT OK!");
-        throw new Error(await response.text());
+    getAPI: async () => {
+      const response = await fetch(`${tabUtils.faq.adminURL}-get`, {
+        method: "GET",
+      });
+
+      try {
+        if (!response.ok) {
+          // 因為要完全連不到 Server 才會到 .catch
+          // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
+          console.log("RESP(GET) NOT OK!");
+          throw new Error(await response.text());
+        }
+
+        const dataArr = await response.json();
+        return dataArr;
+      } catch (err) {
+        alert("抽獎資料獲取失敗！");
+        throw err;
       }
-    } catch (err) {
-      alert("抽獎資料刪除失敗");
-      throw err;
-    }
-  },
+    },
 
-  addAPI: async (data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-add`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
+    updateAPI: async (id, data) => {
+      const response = await fetch(`${tabUtils.faq.adminURL}-update/${id}`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      });
 
-    try {
-      if (!response.ok) {
-        console.log("RESP(ADD) NOT OK!");
-        throw new Error(await response.text());
+      try {
+        if (!response.ok) {
+          console.log("RESP(UPDATE) NOT OK!");
+          throw new Error(await response.text());
+        }
+      } catch (err) {
+        alert("抽獎資料儲存失敗！");
+        throw err;
       }
-      const lastId = await response.json();
-      return lastId;
-    } catch (err) {
-      alert("抽獎資料新增失敗！");
-      throw err;
-    }
-  },
+    },
 
-  template: (data) => {
-    let userState = data.user_auth ? "一般會員" : "停權會員";
-    const template = `
-      <input type="hidden" class="id" value=${data.id}></input>
-      <td class="name">${encodeHTML(data.name)}</td>
-      <td class="username">
-        <div>${encodeHTML(data.username)}</div>
-      </td>
-      <td class="email">
-        <div>${encodeHTML(data.email)}</div>
-      </td>
-      <td class="total-order">${data.order.totalNum}</td>
-      <td class="total-spend">NT$.${data.order.totalSpend}</td>
-      <td class="state">${userState}</td>
-      <td class="btn__area">
-        <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/member-detail'">
-      </td>`;
-    // TODO: 確認上面的 onclick 超連結寫法是否正確
-    return template;
-  },
+    deleteAPI: async (id) => {
+      const response = await fetch(`${tabUtils.faq.adminURL}-delete/${id}`, {
+        method: "GET",
+      });
 
-  getContent: async (newTabContent) => {
-    const tbody = newTabContent.querySelector("tbody");
-    try {
-      // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
-      // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
-      // const dataArr = await menuUtils.getAPI();
-      const dataArr = [
-        {
-          id: 1,
-          name: "user",
-          username: "user00",
-          email: "user@mail.com",
-          user_auth: 0,
-          order: {
-            totalNum: 20,
-            totalSpend: 5000,
+      try {
+        if (!response.ok) {
+          console.log("RESP(DELETE) NOT OK!");
+          throw new Error(await response.text());
+        }
+      } catch (err) {
+        alert("抽獎資料刪除失敗");
+        throw err;
+      }
+    },
+
+    addAPI: async (data) => {
+      const response = await fetch(`${tabUtils.faq.adminURL}-add`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      });
+
+      try {
+        if (!response.ok) {
+          console.log("RESP(ADD) NOT OK!");
+          throw new Error(await response.text());
+        }
+        const lastId = await response.json();
+        return lastId;
+      } catch (err) {
+        alert("抽獎資料新增失敗！");
+        throw err;
+      }
+    },
+
+    template: (data) => {
+      const template = `
+        <input type="hidden" class="id" value=${data.id}></input>
+        <td class="sequence origin">${data.sequence}</td>
+        <td class="heading origin">
+          <div>${encodeHTML(data.heading)}</div>
+        </td>
+        <td class="content origin">
+          <div>${encodeHTML(data.content)}</div>
+        </td>
+        <td class="btn__area origin">
+          <div class="first__check-btn">
+            <input class="btn update-btn" type="button" value="編輯">
+            <input class="btn delete-btn delete__first-btn" type="button" value="刪除">
+          </div>
+  
+          <div class="double__check-btn hide">
+            <input class="btn delete-btn delete__check-btn" type="button" value="確認">
+            <input class="btn delete-btn delete__cancel-btn" type="button" value="取消">
+          </div>
+        </td>
+        
+        <td class="sequence alt hide">
+          <input class="alt__text" type="number" min="1" value=${data.sequence}>
+        </td>
+        <td class="heading alt hide">
+          <textarea class="alt__text" rows="1">${encodeHTML(
+            data.heading
+          )}</textarea>
+        </td>
+        <td class="content alt hide">
+          <textarea class="alt__text" rows="3">${encodeHTML(
+            data.content
+          )}</textarea>
+        </td>
+        <td class="btn__area alt hide">
+          <div class="handle__store-btn">
+            <input class="btn store-btn" type="button" value="儲存">
+            <input class="btn cancel-btn" type="button" value="取消">
+          </div>
+  
+          <div class="handle__add-btn hide">
+            <input class="btn handle-add add__check-btn" type="button" value="新增">
+            <input class="btn handle-add add__cancel-btn" type="button" value="取消">
+          </div>
+        </td>`;
+      return template;
+    },
+
+    getContent: async (newTabContent) => {
+      const tbody = newTabContent.querySelector("tbody");
+      try {
+        // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
+        // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
+        // const dataArr = await tabUtils.faq.getAPI();
+        const dataArr = [
+          {
+            id: 1,
+            sequence: 1,
+            heading: "如何辦理退換貨？",
+            content: `
+            收到商品後如果有瑕疵或是缺件寄錯商品請於七天內提出，超過七天一律不受理。
+            很抱歉讓您收到有問題的商品，如您的商品有問題，為加速處理流程，您可以拍照上傳至信箱，並留下您的問題說明，客服人員將會盡力幫您幫處理。`,
           },
-        },
-      ];
-      for (let i = 0; i < dataArr.length; i++) {
-        const tableRow = document.createElement("tr");
-        tableRow.innerHTML = memberUtils.template(dataArr[i]);
-        tbody.appendChild(tableRow);
+        ];
+        for (let i = 0; i < dataArr.length; i++) {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = tabUtils.faq.template(dataArr[i]);
+          tbody.appendChild(tableRow);
+        }
+        // 新增完成後再將表格排序
+        documentUtils.tableArrange(newTabContent);
+      } catch (err) {
+        console.log(err);
       }
-      // 新增完成後再將表格排序
-      documentUtils.tableArrange(newTabContent);
-    } catch (err) {
-      console.log(err);
-    }
+    },
   },
-};
 
-/* 訂單列表的 func */
-const orderUtils = {
-  adminURL: "/admin-lottery",
+  /* 菜單上傳的 func */
+  menu: {
+    adminURL: "/admin-lottery",
 
-  getAPI: async () => {
-    const response = await fetch(`${lotteryUtils.adminURL}-get`, {
-      method: "GET",
-    });
+    getAPI: async () => {
+      const response = await fetch(`${tabUtils.menu.adminURL}-get`, {
+        method: "GET",
+      });
 
-    try {
-      if (!response.ok) {
-        // 因為要完全連不到 Server 才會到 .catch
-        // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
-        console.log("RESP(GET) NOT OK!");
-        throw new Error(await response.text());
+      try {
+        if (!response.ok) {
+          // 因為要完全連不到 Server 才會到 .catch
+          // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
+          console.log("RESP(GET) NOT OK!");
+          throw new Error(await response.text());
+        }
+
+        const dataArr = await response.json();
+        return dataArr;
+      } catch (err) {
+        alert("抽獎資料獲取失敗！");
+        throw err;
       }
+    },
 
-      const dataArr = await response.json();
-      return dataArr;
-    } catch (err) {
-      alert("抽獎資料獲取失敗！");
-      throw err;
-    }
-  },
+    updateAPI: async (id, data) => {
+      const response = await fetch(`${tabUtils.menu.adminURL}-update/${id}`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      });
 
-  updateAPI: async (id, data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-update/${id}`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(UPDATE) NOT OK!");
-        throw new Error(await response.text());
+      try {
+        if (!response.ok) {
+          console.log("RESP(UPDATE) NOT OK!");
+          throw new Error(await response.text());
+        }
+      } catch (err) {
+        alert("抽獎資料儲存失敗！");
+        throw err;
       }
-    } catch (err) {
-      alert("抽獎資料儲存失敗！");
-      throw err;
-    }
-  },
+    },
 
-  deleteAPI: async (id) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-delete/${id}`, {
-      method: "GET",
-    });
+    deleteAPI: async (id) => {
+      const response = await fetch(`${tabUtils.menu.adminURL}-delete/${id}`, {
+        method: "GET",
+      });
 
-    try {
-      if (!response.ok) {
-        console.log("RESP(DELETE) NOT OK!");
-        throw new Error(await response.text());
+      try {
+        if (!response.ok) {
+          console.log("RESP(DELETE) NOT OK!");
+          throw new Error(await response.text());
+        }
+      } catch (err) {
+        alert("抽獎資料刪除失敗");
+        throw err;
       }
-    } catch (err) {
-      alert("抽獎資料刪除失敗");
-      throw err;
-    }
-  },
+    },
 
-  addAPI: async (data) => {
-    const response = await fetch(`${lotteryUtils.adminURL}-add`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
+    addAPI: async (data) => {
+      const response = await fetch(`${tabUtils.menu.adminURL}-add`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      });
 
-    try {
-      if (!response.ok) {
-        console.log("RESP(ADD) NOT OK!");
-        throw new Error(await response.text());
+      try {
+        if (!response.ok) {
+          console.log("RESP(ADD) NOT OK!");
+          throw new Error(await response.text());
+        }
+        const lastId = await response.json();
+        return lastId;
+      } catch (err) {
+        alert("抽獎資料新增失敗！");
+        throw err;
       }
-      const lastId = await response.json();
-      return lastId;
-    } catch (err) {
-      alert("抽獎資料新增失敗！");
-      throw err;
-    }
+    },
+
+    template: (data) => {
+      const template = `
+        <input type="hidden" class="id" value=${data.id}></input>
+        <td class="sequence origin">${data.sequence}</td>
+        <td class="dishname origin">${encodeHTML(data.name)}</td>
+        <td class="description dish-description origin">
+          <div>${encodeHTML(data.description)}</div>
+        </td>
+        <td class="image origin">
+          <img class="image" src=${encodeHTML(data.image)}>
+        </td>
+        <td class="price dish-price origin">NT.${data.price}</td>
+        <td class="state origin">${data.state}</td>
+        <td class="btn__area origin">
+          <div class="first__check-btn">
+            <input class="btn update-btn" type="button" value="編輯">
+            <input class="btn delete-btn delete__first-btn" type="button" value="刪除">
+          </div>
+  
+          <div class="double__check-btn hide">
+            <input class="btn delete-btn delete__check-btn" type="button" value="確認">
+            <input class="btn delete-btn delete__cancel-btn" type="button" value="取消">
+          </div>
+        </td>
+        
+        <td class="sequence alt hide">
+          <input class="alt__text" type="number" min="1" value=${data.sequence}>
+        </td>
+        <td class="dishname alt hide">
+          <textarea class="alt__text" rows="1">${encodeHTML(
+            data.name
+          )}</textarea>
+        </td>
+        <td class="description alt hide">
+          <textarea class="alt__text" rows="3">${encodeHTML(
+            data.description
+          )}</textarea>
+        </td>
+        <td class="image alt hide">
+          <textarea class="alt__text" rows="1">${encodeHTML(
+            data.image
+          )}</textarea>
+        </td>
+        <td class="price alt hide">
+          <input class="alt__text" type="number" min="1" value=${data.price}>
+        </td>
+        <td class="state alt hide">
+          <input class="alt__text" type="text" value=${data.state}>
+        </td>
+        <td class="btn__area alt hide">
+          <div class="handle__store-btn">
+            <input class="btn store-btn" type="button" value="儲存">
+            <input class="btn cancel-btn" type="button" value="取消">
+          </div>
+  
+          <div class="handle__add-btn hide">
+            <input class="btn handle-add add__check-btn" type="button" value="新增">
+            <input class="btn handle-add add__cancel-btn" type="button" value="取消">
+          </div>
+        </td>`;
+      return template;
+    },
+
+    getContent: async (newTabContent) => {
+      const tbody = newTabContent.querySelector("tbody");
+      try {
+        // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
+        // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
+        // const dataArr = await tabUtils.menu.getAPI();
+        const dataArr = [
+          {
+            id: 1,
+            sequence: 1,
+            name: "鮮燉洋芋白丁佐莎莎",
+            description: `
+            收到商品後如果有瑕疵或是缺件寄錯商品請於七天內提出，超過七天一律不受理。
+            很抱歉讓您收到有問題的商品，如您的商品有問題，為加速處理流程，您可以拍照上傳至信箱，並留下您的問題說明，客服人員將會盡力幫您幫處理。`,
+            image: "/css/lottery_pic/bg.png",
+            price: 200,
+            state: "供應中",
+          },
+        ];
+        for (let i = 0; i < dataArr.length; i++) {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = tabUtils.menu.template(dataArr[i]);
+          tbody.appendChild(tableRow);
+        }
+        // 新增完成後再將表格排序
+        documentUtils.tableArrange(newTabContent);
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 
-  template: (data) => {
-    const template = `
-      <input type="hidden" class="id" value=${data.id}></input>
-      <td class="state">${encodeHTML(data.state)}</td>
-      <td class="order-num">${data.num}</td>
-      <td class="created-at">${encodeHTML(data.createdAt)}</td>
-      <td class="orderer">${encodeHTML(data.user.name)}</td>
-      <td class="price">NT$.${data.price}</td>
-      <td class="btn__area">
-        <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/order-detail'">
-      </td>`;
-    // TODO: 確認上面的 onclick 超連結寫法是否正確
-    return template;
-  },
+  /* 會員管理的 func */
+  member: {
+    adminURL: "/admin-lottery",
 
-  getContent: async (newTabContent) => {
-    const tbody = newTabContent.querySelector("tbody");
-    try {
-      // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
-      // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
-      // const dataArr = await menuUtils.getAPI();
-      const dataArr = [
-        {
-          id: 1,
-          state: "處理中",
-          num: 12321,
-          createdAt: "2022-08-05 14:23:51",
-          price: 520,
-          user: {
+    getAPI: async () => {
+      const response = await fetch(`${tabUtils.member.adminURL}-get`, {
+        method: "GET",
+      });
+
+      try {
+        if (!response.ok) {
+          // 因為要完全連不到 Server 才會到 .catch
+          // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
+          console.log("RESP(GET) NOT OK!");
+          throw new Error(await response.text());
+        }
+
+        const dataArr = await response.json();
+        return dataArr;
+      } catch (err) {
+        alert("抽獎資料獲取失敗！");
+        throw err;
+      }
+    },
+
+    template: (data) => {
+      let userState = data.user_auth ? "一般會員" : "停權會員";
+      const template = `
+        <input type="hidden" class="id" value=${data.id}></input>
+        <td class="name">${encodeHTML(data.name)}</td>
+        <td class="username">
+          <div>${encodeHTML(data.username)}</div>
+        </td>
+        <td class="email">
+          <div>${encodeHTML(data.email)}</div>
+        </td>
+        <td class="total-order">${data.order.totalNum}</td>
+        <td class="total-spend">NT$.${data.order.totalSpend}</td>
+        <td class="state">${userState}</td>
+        <td class="btn__area">
+          <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/member-detail'">
+        </td>`;
+      // TODO: 確認上面的 onclick 超連結寫法是否正確
+      return template;
+    },
+
+    getContent: async (newTabContent) => {
+      const tbody = newTabContent.querySelector("tbody");
+      try {
+        // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
+        // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
+        // const dataArr = await tabUtils.menu.getAPI();
+        const dataArr = [
+          {
+            id: 1,
             name: "user",
+            username: "user00",
+            email: "user@mail.com",
+            user_auth: 0,
+            order: {
+              totalNum: 20,
+              totalSpend: 5000,
+            },
           },
-        },
-      ];
-      for (let i = 0; i < dataArr.length; i++) {
-        const tableRow = document.createElement("tr");
-        tableRow.innerHTML = orderUtils.template(dataArr[i]);
-        tbody.appendChild(tableRow);
+        ];
+        for (let i = 0; i < dataArr.length; i++) {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = tabUtils.member.template(dataArr[i]);
+          tbody.appendChild(tableRow);
+        }
+        // 新增完成後再將表格排序
+        documentUtils.tableArrange(newTabContent);
+      } catch (err) {
+        console.log(err);
       }
-      // 新增完成後再將表格排序
-      documentUtils.tableArrange(newTabContent);
-    } catch (err) {
-      console.log(err);
-    }
+    },
+  },
+
+  /* 訂單列表的 func */
+  order: {
+    adminURL: "/admin-lottery",
+
+    getAPI: async () => {
+      const response = await fetch(`${tabUtils.order.adminURL}-get`, {
+        method: "GET",
+      });
+
+      try {
+        if (!response.ok) {
+          // 因為要完全連不到 Server 才會到 .catch
+          // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
+          console.log("RESP(GET) NOT OK!");
+          throw new Error(await response.text());
+        }
+
+        const dataArr = await response.json();
+        return dataArr;
+      } catch (err) {
+        alert("抽獎資料獲取失敗！");
+        throw err;
+      }
+    },
+
+    template: (data) => {
+      const template = `
+        <input type="hidden" class="id" value=${data.id}></input>
+        <td class="state">${encodeHTML(data.state)}</td>
+        <td class="order-num">${data.num}</td>
+        <td class="created-at">${encodeHTML(data.createdAt)}</td>
+        <td class="orderer">${encodeHTML(data.user.name)}</td>
+        <td class="price">NT$.${data.price}</td>
+        <td class="btn__area">
+          <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/order-detail'">
+        </td>`;
+      // TODO: 確認上面的 onclick 超連結寫法是否正確
+      return template;
+    },
+
+    getContent: async (newTabContent) => {
+      const tbody = newTabContent.querySelector("tbody");
+      try {
+        // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
+        // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
+        // const dataArr = await tabUtils.menu.getAPI();
+        const dataArr = [
+          {
+            id: 1,
+            state: "處理中",
+            num: 12321,
+            createdAt: "2022-08-05 14:23:51",
+            price: 520,
+            user: {
+              name: "user",
+            },
+          },
+        ];
+        for (let i = 0; i < dataArr.length; i++) {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = tabUtils.order.template(dataArr[i]);
+          tbody.appendChild(tableRow);
+        }
+        // 新增完成後再將表格排序
+        documentUtils.tableArrange(newTabContent);
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 
@@ -1082,8 +995,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const newTabContent = document.createElement("div");
         newTabContent.classList.add("tab-content");
         newTabContent.setAttribute("id", targetTab);
-        newTabContent.innerHTML = documentUtils.tableTemplate;
         contentArea.appendChild(newTabContent);
+        // newTabContent.innerHTML = documentUtils.tableTemplate;
         documentUtils.getTabContent(targetTab, newTabContent);
         eventListenerUtils[`${targetTab}`](newTabContent);
       }
