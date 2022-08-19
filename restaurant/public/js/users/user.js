@@ -19,6 +19,16 @@ const documentUtils = {
     thead.appendChild(theadRow);
   },
 
+  // 塞入頁籤的內容
+  getTabContent: (targetTab, newTabContent) => {
+    if (utils[targetTab].tableTitleArr) {
+      newTabContent.innerHTML = documentUtils.tableTemplate;
+      let titleArr = utils[targetTab].tableTitleArr;
+      documentUtils.getTableTitle(newTabContent, titleArr);
+    }
+    utils[targetTab].getContent(newTabContent);
+  },
+
   // 編輯表格or取消編輯表格功能
   dataUpdate: (target, action) => {
     const originContents = target.querySelectorAll(".origin");
@@ -70,186 +80,187 @@ function encodeHTML(str) {
     .replace(/"/g, "&quot;");
 }
 
-/* 會員資料的 func */ //TODO:
-const dataUtils = {
-  adminURL: "/admin-lottery",
+const utils = {
+  /* 會員資料的 func */ //TODO:
+  data: {
+    adminURL: "/admin-lottery",
 
-  getAPI: async () => {
-    const response = await fetch(`${dataUtils.adminURL}-get`, {
-      method: "GET",
-    });
+    getAPI: async () => {
+      const response = await fetch(`${utils.data.adminURL}-get`, {
+        method: "GET",
+      });
 
-    try {
-      if (!response.ok) {
-        // 因為要完全連不到 Server 才會到 .catch
-        // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
-        console.log("RESP(GET) NOT OK!");
-        throw new Error(await response.text());
+      try {
+        if (!response.ok) {
+          // 因為要完全連不到 Server 才會到 .catch
+          // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
+          console.log("RESP(GET) NOT OK!");
+          throw new Error(await response.text());
+        }
+
+        const dataArr = await response.json();
+        return dataArr;
+      } catch (err) {
+        alert("抽獎資料獲取失敗！");
+        throw err;
       }
+    },
 
-      const dataArr = await response.json();
-      return dataArr;
-    } catch (err) {
-      alert("抽獎資料獲取失敗！");
-      throw err;
-    }
-  },
+    updateAPI: async (data) => {
+      // 在使用者的 controller 去拿 req.session.username 來做權限管理的身份確認
+      const response = await fetch(`${utils.data.adminURL}-update`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      });
 
-  updateAPI: async (data) => {
-    // 在使用者的 controller 去拿 req.session.username 來做權限管理的身份確認
-    const response = await fetch(`${dataUtils.adminURL}-update`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    });
-
-    try {
-      if (!response.ok) {
-        console.log("RESP(UPDATE) NOT OK!");
-        throw new Error(await response.text());
+      try {
+        if (!response.ok) {
+          console.log("RESP(UPDATE) NOT OK!");
+          throw new Error(await response.text());
+        }
+      } catch (err) {
+        alert("抽獎資料儲存失敗！");
+        throw err;
       }
-    } catch (err) {
-      alert("抽獎資料儲存失敗！");
-      throw err;
-    }
-  },
+    },
 
-  template: (data) => {
-    const htmlTemplate = `
-      <div class="data__wrapper">
-        <div class="user-data">帳號：
-          <span>${encodeHTML(data.username)}</span>
-        </div>
-        <div class="user-data name">姓名：
-          <span class="origin">${encodeHTML(data.name)}</span>
-          <input class="alt hide alt__text" type="text" value=${encodeHTML(
-            data.name
-          )}>
-        </div>
-        <div class="user-data address">地址：
-          <span class="origin">${encodeHTML(data.address)}</span>
-          <input class="alt hide alt__text" type="text" value=${encodeHTML(
-            data.address
-          )}>
-        </div>
-        <div class="user-data phone">電話：
-          <span class="origin">${encodeHTML(data.phone)}</span>
-          <input class="alt hide alt__text" type="tel" value=${encodeHTML(
-            data.phone
-          )}>
-        </div>
-        <div class="user-data email">信箱：
-          <span class="origin">${encodeHTML(data.email)}</span>
-          <input class="alt hide alt__text" type="email" value=${encodeHTML(
-            data.email
-          )}>
-        </div>
-        
-        <div class="btn__area">
-          <div class="handle__update-btn origin">
-            <input class="btn update-btn" type="button" value="編輯">
+    template: (data) => {
+      const htmlTemplate = `
+        <div class="data__wrapper">
+          <div class="user-data">帳號：
+            <span>${encodeHTML(data.username)}</span>
           </div>
-
-          <div class="handle__store-btn alt hide">
-            <input class="btn store-btn" type="button" value="儲存">
-            <input class="btn cancel-btn" type="button" value="取消">
+          <div class="user-data name">姓名：
+            <span class="origin">${encodeHTML(data.name)}</span>
+            <input class="alt hide alt__text" type="text" value=${encodeHTML(
+              data.name
+            )}>
           </div>
-        </div>
-      </div>`;
-    return htmlTemplate;
-  },
+          <div class="user-data address">地址：
+            <span class="origin">${encodeHTML(data.address)}</span>
+            <input class="alt hide alt__text" type="text" value=${encodeHTML(
+              data.address
+            )}>
+          </div>
+          <div class="user-data phone">電話：
+            <span class="origin">${encodeHTML(data.phone)}</span>
+            <input class="alt hide alt__text" type="tel" value=${encodeHTML(
+              data.phone
+            )}>
+          </div>
+          <div class="user-data email">信箱：
+            <span class="origin">${encodeHTML(data.email)}</span>
+            <input class="alt hide alt__text" type="email" value=${encodeHTML(
+              data.email
+            )}>
+          </div>
+          
+          <div class="btn__area">
+            <div class="handle__update-btn origin">
+              <input class="btn update-btn" type="button" value="編輯">
+            </div>
+  
+            <div class="handle__store-btn alt hide">
+              <input class="btn store-btn" type="button" value="儲存">
+              <input class="btn cancel-btn" type="button" value="取消">
+            </div>
+          </div>
+        </div>`;
+      return htmlTemplate;
+    },
 
-  getContent: async (newTabContent) => {
-    //TODO:
-    try {
-      // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
-      // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
-      const dataObj = {
-        // (await dataUtils.getAPI());
-        username: "user00",
-        name: "user",
-        address: "台灣台北",
-        phone: "09123456789",
-        email: "user@mail.com",
-      };
-      newTabContent.innerHTML = dataUtils.template(dataObj);
-    } catch (err) {
-      console.log(err);
-      newTabContent.innerHTML = `<span>error</span>`; //TODO:
-    }
-  },
-};
-
-/* 訂單記錄的 func */ //TODO:
-const orderUtils = {
-  adminURL: "/admin-lottery",
-
-  getAPI: async () => {
-    const response = await fetch(`${orderUtils.adminURL}-get`, {
-      method: "GET",
-    });
-
-    try {
-      if (!response.ok) {
-        // 因為要完全連不到 Server 才會到 .catch
-        // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
-        console.log("RESP(GET) NOT OK!");
-        throw new Error(await response.text());
-      }
-
-      const dataArr = await response.json();
-      return dataArr;
-    } catch (err) {
-      alert("抽獎資料獲取失敗！");
-      throw err;
-    }
-  },
-
-  template: (data) => {
-    const htmlTemplate = `
-      <input type="hidden" class="id" value=${data.id}></input>
-      <td class="order-num">${data.num}</td>
-      <td class="created-at">${encodeHTML(data.createdAt)}</td>
-      <td class="price">${encodeHTML(data.price)}</td>
-      <td class="state">${encodeHTML(data.state)}</td>
-      <td class="btn__area">
-        <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/user/order-detail'">
-      </td>`;
-    // TODO: 確認上面的 onclick 超連結寫法是否正確
-    return htmlTemplate;
-  },
-
-  getContent: async (newTabContent) => {
-    const titleArr = ["訂單編號", "訂單日期", "金額", "狀態", "管理"];
-    documentUtils.getTableTitle(newTabContent, titleArr);
-
-    const tbody = newTabContent.querySelector("tbody");
-    try {
+    getContent: async (newTabContent) => {
       //TODO:
-      // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
-      // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
-      // const dataArr = await orderUtils.getAPI();
-      const dataArr = [
-        {
-          // (await orderUtils.getAPI());
-          id: 1,
-          createdAt: "2022-08-05 14:23:51",
-          num: 123321,
-          price: "$520",
-          state: "處理中",
-        },
-      ];
-      for (let i = 0; i < dataArr.length; i++) {
-        const tableRow = document.createElement("tr");
-        tableRow.innerHTML = orderUtils.template(dataArr[i]);
-        tbody.appendChild(tableRow);
+      try {
+        // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
+        // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
+        const dataObj = {
+          // (await utils.data.getAPI());
+          username: "user00",
+          name: "user",
+          address: "台灣台北",
+          phone: "09123456789",
+          email: "user@mail.com",
+        };
+        newTabContent.innerHTML = utils.data.template(dataObj);
+      } catch (err) {
+        console.log(err);
+        newTabContent.innerHTML = `<span>error</span>`; //TODO:
       }
-    } catch (err) {
-      console.log(err);
-      newTabContent.innerHTML = `<span>error</span>`; //TODO:
-    }
+    },
+  },
+
+  /* 訂單記錄的 func */ //TODO:
+  order: {
+    adminURL: "/admin-lottery",
+
+    getAPI: async () => {
+      const response = await fetch(`${utils.order.adminURL}-get`, {
+        method: "GET",
+      });
+
+      try {
+        if (!response.ok) {
+          // 因為要完全連不到 Server 才會到 .catch
+          // 因此要加上此判斷才能區分出 404, 500 之類的錯誤
+          console.log("RESP(GET) NOT OK!");
+          throw new Error(await response.text());
+        }
+
+        const dataArr = await response.json();
+        return dataArr;
+      } catch (err) {
+        alert("抽獎資料獲取失敗！");
+        throw err;
+      }
+    },
+
+    tableTitleArr: ["訂單編號", "訂單日期", "金額", "狀態", "管理"],
+
+    template: (data) => {
+      const htmlTemplate = `
+        <input type="hidden" class="id" value=${data.id}></input>
+        <td class="order-num">${data.num}</td>
+        <td class="created-at">${encodeHTML(data.createdAt)}</td>
+        <td class="price">${encodeHTML(data.price)}</td>
+        <td class="state">${encodeHTML(data.state)}</td>
+        <td class="btn__area">
+          <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/user/order-detail'">
+        </td>`;
+      // TODO: 確認上面的 onclick 超連結寫法是否正確
+      return htmlTemplate;
+    },
+
+    getContent: async (newTabContent) => {
+      const tbody = newTabContent.querySelector("tbody");
+      try {
+        //TODO:
+        // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
+        // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
+        // const dataArr = await utils.order.getAPI();
+        const dataArr = [
+          {
+            // (await utils.order.getAPI());
+            id: 1,
+            createdAt: "2022-08-05 14:23:51",
+            num: 123321,
+            price: "$520",
+            state: "處理中",
+          },
+        ];
+        for (let i = 0; i < dataArr.length; i++) {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = utils.order.template(dataArr[i]);
+          tbody.appendChild(tableRow);
+        }
+      } catch (err) {
+        console.log(err);
+        newTabContent.innerHTML = `<span>error</span>`; //TODO:
+      }
+    },
   },
 };
 
@@ -286,11 +297,8 @@ document.addEventListener("DOMContentLoaded", () => {
         newTabContent.classList.add("tab-content");
         newTabContent.setAttribute("id", `${targetTab}content`);
         contentArea.appendChild(newTabContent);
-        if (targetTab === "order") {
-          newTabContent.innerHTML = documentUtils.tableTemplate;
-          orderUtils.getContent(newTabContent);
-        } else {
-          dataUtils.getContent(newTabContent);
+        documentUtils.getTabContent(targetTab, newTabContent);
+        if (eventListenerUtils[`${targetTab}`]) {
           eventListenerUtils[`${targetTab}`](newTabContent);
         }
       }
@@ -322,26 +330,26 @@ const eventListenerUtils = {
       // 儲存功能
       let classNameArr = ["name", "address", "phone", "email"];
       if (e.target.classList.contains("store-btn")) {
-        // TODO: 這邊只是暫時這樣寫，以免在下面 dataUtils.template(data) 出錯
+        // TODO: 這邊只是暫時這樣寫，以免在下面 utils.data.template(data) 出錯
         const data = { username: "user00" };
         documentUtils.dataStore(
           targetTabContent,
           data,
           classNameArr,
-          dataUtils,
+          utils.data,
           false
         );
 
         /*
-        dataUtils
+        utils.data
           .updateAPI(data)
           .then(() => {
-            targetTabContent.innerHTML = dataUtils.template(data);
+            targetTabContent.innerHTML = utils.data.template(data);
           })
           .catch((err) => {
             // TODO: 這邊只是暫時這樣寫，之後要改成 try/catch，並加上比較好的錯誤處理
             console.log(err);
-            targetTabContent.innerHTML = dataUtils.template(data);
+            targetTabContent.innerHTML = utils.data.template(data);
           });
         */
       }
