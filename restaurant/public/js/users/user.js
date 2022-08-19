@@ -21,12 +21,12 @@ const documentUtils = {
 
   // 塞入頁籤的內容
   getTabContent: (targetTab, newTabContent) => {
-    if (utils[targetTab].tableTitleArr) {
+    if (tabUtils[targetTab].tableTitleArr) {
       newTabContent.innerHTML = documentUtils.tableTemplate;
-      let titleArr = utils[targetTab].tableTitleArr;
+      let titleArr = tabUtils[targetTab].tableTitleArr;
       documentUtils.getTableTitle(newTabContent, titleArr);
     }
-    utils[targetTab].getContent(newTabContent);
+    tabUtils[targetTab].getContent(newTabContent);
   },
 
   // 編輯表格or取消編輯表格功能
@@ -46,7 +46,13 @@ const documentUtils = {
   },
 
   // 儲存表格功能
-  dataStore: async (target, defaultData, classNameArr, utils, needArrange) => {
+  dataStore: async (
+    target,
+    defaultData,
+    classNameArr,
+    targetUtils,
+    needArrange
+  ) => {
     const data = defaultData || {
       id: target.querySelector("input.id").value,
     };
@@ -56,8 +62,8 @@ const documentUtils = {
     }
 
     try {
-      await utils.updateAPI(data);
-      target.innerHTML = utils.template(data);
+      await targetUtils.updateAPI(data);
+      target.innerHTML = targetUtils.template(data);
       if (needArrange) {
         const targetTabContent = target.closest(`.tab-content#${targetTab}`);
         documentUtils.tableArrange(targetTabContent);
@@ -65,7 +71,7 @@ const documentUtils = {
     } catch (err) {
       console.log(err);
       // TODO: 確認錯誤之後要做什麼動作
-      // target.innerHTML = utils.template(data);
+      // target.innerHTML = targetUtils.template(data);
     }
   },
 };
@@ -80,13 +86,13 @@ function encodeHTML(str) {
     .replace(/"/g, "&quot;");
 }
 
-const utils = {
+const tabUtils = {
   /* 會員資料的 func */ //TODO:
   data: {
     adminURL: "/admin-lottery",
 
     getAPI: async () => {
-      const response = await fetch(`${utils.data.adminURL}-get`, {
+      const response = await fetch(`${tabUtils.data.adminURL}-get`, {
         method: "GET",
       });
 
@@ -108,7 +114,7 @@ const utils = {
 
     updateAPI: async (data) => {
       // 在使用者的 controller 去拿 req.session.username 來做權限管理的身份確認
-      const response = await fetch(`${utils.data.adminURL}-update`, {
+      const response = await fetch(`${tabUtils.data.adminURL}-update`, {
         method: "POST",
         body: JSON.stringify(data),
         headers: new Headers({
@@ -178,14 +184,14 @@ const utils = {
         // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
         // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
         const dataObj = {
-          // (await utils.data.getAPI());
+          // (await tabUtils.data.getAPI());
           username: "user00",
           name: "user",
           address: "台灣台北",
           phone: "09123456789",
           email: "user@mail.com",
         };
-        newTabContent.innerHTML = utils.data.template(dataObj);
+        newTabContent.innerHTML = tabUtils.data.template(dataObj);
       } catch (err) {
         console.log(err);
         newTabContent.innerHTML = `<span>error</span>`; //TODO:
@@ -198,7 +204,7 @@ const utils = {
     adminURL: "/admin-lottery",
 
     getAPI: async () => {
-      const response = await fetch(`${utils.order.adminURL}-get`, {
+      const response = await fetch(`${tabUtils.order.adminURL}-get`, {
         method: "GET",
       });
 
@@ -240,10 +246,10 @@ const utils = {
         //TODO:
         // 這邊如果 getAPI() 出錯就會跑去 catch，導致不會執行到 innerHTML 這 part
         // 且就算用 {} 來當作 dataObj，也會因為對 undefined 型態的東西做 encode 而出錯跳到 catch
-        // const dataArr = await utils.order.getAPI();
+        // const dataArr = await tabUtils.order.getAPI();
         const dataArr = [
           {
-            // (await utils.order.getAPI());
+            // (await tabUtils.order.getAPI());
             id: 1,
             createdAt: "2022-08-05 14:23:51",
             num: 123321,
@@ -253,7 +259,7 @@ const utils = {
         ];
         for (let i = 0; i < dataArr.length; i++) {
           const tableRow = document.createElement("tr");
-          tableRow.innerHTML = utils.order.template(dataArr[i]);
+          tableRow.innerHTML = tabUtils.order.template(dataArr[i]);
           tbody.appendChild(tableRow);
         }
       } catch (err) {
@@ -330,26 +336,26 @@ const eventListenerUtils = {
       // 儲存功能
       let classNameArr = ["name", "address", "phone", "email"];
       if (e.target.classList.contains("store-btn")) {
-        // TODO: 這邊只是暫時這樣寫，以免在下面 utils.data.template(data) 出錯
+        // TODO: 這邊只是暫時這樣寫，以免在下面 tabUtils.data.template(data) 出錯
         const data = { username: "user00" };
         documentUtils.dataStore(
           targetTabContent,
           data,
           classNameArr,
-          utils.data,
+          tabUtils.data,
           false
         );
 
         /*
-        utils.data
+        tabUtils.data
           .updateAPI(data)
           .then(() => {
-            targetTabContent.innerHTML = utils.data.template(data);
+            targetTabContent.innerHTML = tabUtils.data.template(data);
           })
           .catch((err) => {
             // TODO: 這邊只是暫時這樣寫，之後要改成 try/catch，並加上比較好的錯誤處理
             console.log(err);
-            targetTabContent.innerHTML = utils.data.template(data);
+            targetTabContent.innerHTML = tabUtils.data.template(data);
           });
         */
       }
