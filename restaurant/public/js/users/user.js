@@ -1,5 +1,6 @@
 import { documentUtils, encodeHTML } from "../utils.js";
 
+// TODO: api func 都完成後可以看能不能把共同的項目抽出來重組
 const tabUtils = {
   /* 會員資料的 func */
   //TODO:
