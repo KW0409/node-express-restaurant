@@ -1,229 +1,6 @@
-/* 通用 func */
-const documentUtils = {
-  tableTemplate: `
-  <table>
-    <thead></thead>
-    <tbody></tbody>
-  </table>
-  `,
+import { documentUtils, encodeHTML } from "../utils.js";
 
-  // 讓表格添加新增按鈕
-  getTableAddBtn: (newTabContent) => {
-    //<input class="add-btn" type="button" value="新增">
-    const addBtn = document.createElement("input");
-    addBtn.classList.add("add-btn");
-    addBtn.setAttribute("type", "button");
-    addBtn.setAttribute("value", "新增");
-    newTabContent.appendChild(addBtn);
-  },
-
-  // 塞入表格的標題
-  getTableTitle: (newTabContent, titleArr) => {
-    const thead = newTabContent.querySelector("thead");
-    const theadRow = document.createElement("tr");
-    for (let i = 0; i < titleArr.length; i++) {
-      const tableTitle = document.createElement("th");
-      tableTitle.innerText = titleArr[i];
-      theadRow.appendChild(tableTitle);
-    }
-    thead.appendChild(theadRow);
-  },
-
-  // 塞入表格的內容
-  getTabContent: (targetTabId, newTabContent) => {
-    if (tabUtils[targetTabId].tableTitleArr) {
-      newTabContent.innerHTML = documentUtils.tableTemplate;
-      let titleArr = tabUtils[targetTabId].tableTitleArr;
-      documentUtils.getTableTitle(newTabContent, titleArr);
-    }
-    tabUtils[targetTabId].getContent(newTabContent);
-  },
-
-  // 表格自動排序功能
-  tableArrange: (targetTabContent) => {
-    const tbody = targetTabContent.querySelector("tbody");
-    const trNodeList = targetTabContent.querySelectorAll("tbody tr");
-    const trArrList = [];
-    for (let i = 0; i < trNodeList.length; i++) {
-      // selectorAll 抓到的 trNodeList 不是真正的 arr，因此要先變成一個真正的 arr 才能操作
-      trArrList.push(trNodeList[i]);
-    }
-
-    const newArrDOM = [];
-    const { length } = trArrList;
-    for (let i = 0; i < length; i++) {
-      let minNum = Number(
-        trArrList[0].querySelector(".sequence.origin").innerText
-      );
-      let minNumIndex = 0;
-      for (let j = 1; j < trArrList.length; j++) {
-        const currentNum = Number(
-          trArrList[j].querySelector(".sequence.origin").innerText
-        );
-        if (currentNum < minNum) {
-          minNum = currentNum;
-          minNumIndex = j;
-        }
-      }
-      newArrDOM.push(trArrList[minNumIndex]);
-      trArrList.splice(minNumIndex, 1);
-    }
-
-    while (tbody.firstChild) {
-      tbody.removeChild(tbody.firstChild);
-    }
-    for (let i = 0; i < newArrDOM.length; i++) {
-      tbody.appendChild(newArrDOM[i]);
-    }
-  },
-
-  // 檢查表格欄位值(是否有空值＆機率總和)功能
-  // TODO: 確認其他表格不會被檢查機率應該就好了，還有因為改過名稱，要確認函式名稱問題
-  dataCheck: (targetRow, classNameArr, dataObj) => {
-    for (const className of classNameArr) {
-      let altInputValue = targetRow.querySelector(
-        `.${className} .alt__text`
-      ).value;
-      // 判斷是否有空值
-      if (altInputValue === "") {
-        return alert("表格欄位不可以有空白！");
-      }
-      dataObj[className] = altInputValue;
-    }
-    console.log(dataObj); //TODO:
-
-    const percentageList = document.querySelectorAll(".percentage .alt__text");
-    if (percentageList.length) {
-      let percentageSum = 0;
-      for (const percentage of percentageList) {
-        percentageSum += Number(percentage.value);
-      }
-      if (percentageSum > 100) {
-        // 限定不可超過 100% 即可，不然會無法改動表格
-        return alert(`機率總和不可超過 100%！目前機率： ${percentageSum} %`);
-      }
-    }
-    return true;
-  },
-
-  // 編輯表格or取消編輯表格功能
-  dataUpdate: (target, action) => {
-    const originContents = target.querySelectorAll(".origin");
-    const altInput = target.querySelectorAll(".alt");
-
-    for (let i = 0; i < originContents.length; i++) {
-      if (action === "update") {
-        originContents[i].classList.add("hide");
-        altInput[i].classList.remove("hide");
-      } else if (action === "cancel") {
-        originContents[i].classList.remove("hide");
-        altInput[i].classList.add("hide");
-      }
-    }
-  },
-
-  // 儲存表格功能
-  // TODO: 各頁籤功能完成後，確認跟 user.js 的差別
-  dataStore: async (target, targetTabId, classNameArr) => {
-    const data = { id: target.querySelector("input.id").value };
-    const dataCheckPass = documentUtils.dataCheck(target, classNameArr, data);
-    if (!dataCheckPass) {
-      // 如果通過 documentUtils.dataCheck 會回傳 true，反之直接 return
-      return;
-    }
-
-    const targetTabContent = target.closest(`.tab-content#${targetTabId}`);
-    try {
-      await tabUtils[targetTabId].updateAPI(data.id, data);
-      target.innerHTML = tabUtils[targetTabId].template(data);
-      documentUtils.tableArrange(targetTabContent);
-    } catch (err) {
-      console.log(err);
-    }
-  },
-
-  // 刪除表格欄位功能(只是單純刪除表格欄位，並沒有刪除資料庫的資料)
-  tableRowDelete: (e, targetTabId) => {
-    const targetRow = e.target.closest("tr");
-    const firstCheckBtn = targetRow.querySelector(".first__check-btn");
-    const doubleCheckBtn = targetRow.querySelector(".double__check-btn");
-    if (e.target.classList.contains("delete__first-btn")) {
-      firstCheckBtn.classList.add("hide");
-      doubleCheckBtn.classList.remove("hide");
-    } else if (e.target.classList.contains("delete__cancel-btn")) {
-      firstCheckBtn.classList.remove("hide");
-      doubleCheckBtn.classList.add("hide");
-    } else if (e.target.classList.contains("delete__check-btn")) {
-      const id = targetRow.querySelector("input.id").value;
-      documentUtils.dataDelete(targetTabId, targetRow, id);
-    }
-  },
-
-  // 刪除表格資料功能(把刪除的欄位 fetch delete 到資料庫)
-  // TODO: 待資料庫建好後確認使用上有無問題
-  dataDelete: async (targetTabId, targetRow, id) => {
-    try {
-      await tabUtils[targetTabId].deleteAPI(id);
-      targetRow.parentNode.removeChild(targetRow);
-    } catch (err) {
-      console.log(err);
-    }
-  },
-
-  // 新增表格欄位功能(只是單純新增表格欄位，還沒有新增到資料庫)
-  tableRowAdd: (e, targetTabId, classNameArr) => {
-    const newRow = document.createElement("tr");
-    const data = { id: "0" };
-    for (const className of classNameArr) {
-      data[className] = "";
-    }
-    newRow.innerHTML = tabUtils[targetTabId].template(data);
-
-    const targetTabTbody = e.target.parentNode.querySelector("tbody");
-    targetTabTbody.appendChild(newRow);
-    newRow.querySelector(".handle__store-btn").classList.add("hide");
-    newRow.querySelector(".handle__add-btn").classList.remove("hide");
-    newRow.querySelector(".update-btn").click();
-  },
-
-  // 新增表格資料功能(把新增的欄位 fetch add 到資料庫)
-  // TODO: 待資料庫建好後確認使用上有無問題
-  dataAdd: async (e, targetTabId, classNameArr) => {
-    const targetRow = e.target.closest("tr");
-    if (e.target.classList.contains("add__cancel-btn")) {
-      targetRow.parentNode.removeChild(targetRow);
-      return;
-    }
-
-    const data = {};
-    const dataCheckPass = documentUtils.dataCheck(
-      targetRow,
-      classNameArr,
-      data
-    );
-    if (!dataCheckPass) return;
-
-    const targetTabContent = targetRow.closest(`.tab-content#${targetTabId}`);
-    try {
-      data.id = await tabUtils[targetTabId].addAPI(data);
-      targetRow.innerHTML = tabUtils[targetTabId].template(data);
-      documentUtils.tableArrange(targetTabContent);
-    } catch (err) {
-      console.log(err);
-    }
-  },
-};
-
-function encodeHTML(str) {
-  // 對 number type 的值做 encodeHTML 會出錯
-  return str
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/&/g, "&amp;")
-    .replace(/'/g, "&#39;")
-    .replace(/"/g, "&quot;");
-}
-
+// TODO: api func 都完成後可以看能不能把共同的項目抽出來重組
 const tabUtils = {
   /* 抽獎項目的 func */
   lottery: {
@@ -982,9 +759,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // 再按照選擇的頁籤動態新增 tab-content 的內容
-      const targetTabId = e.target.id;
+      const targetTabContentId = e.target.id.split("-")[0];
       const targetTabContent = document.querySelector(
-        `.tab-content#${targetTabId}`
+        `.tab-content#${targetTabContentId}`
       );
       const contentArea = document.querySelector(".content__area");
       if (targetTabContent) {
@@ -993,23 +770,26 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         const newTabContent = document.createElement("div");
         newTabContent.classList.add("tab-content");
-        newTabContent.setAttribute("id", targetTabId);
+        newTabContent.setAttribute("id", targetTabContentId);
         contentArea.appendChild(newTabContent);
-        documentUtils.getTabContent(targetTabId, newTabContent);
-        /* TODO:
-        if (eventListenerUtils[`${targetTabId}`]) {
-          eventListenerUtils[`${targetTabId}`](newTabContent);
-        }
-        */
+        documentUtils.getTabContent(
+          tabUtils[targetTabContentId],
+          newTabContent
+        );
       }
     }
   });
+  // 讓畫面一開始就呈現出抽獎項目的內容
+  // TODO: 之後要改成用 url 來決定呈現哪個頁籤
+  const lotteryTab = document.querySelector(".tab-title#lottery-tab");
+  lotteryTab.click();
 
   // 頁籤內的表格按鈕功能
   document.querySelector(".content__area").addEventListener("click", (e) => {
     const targetRow = e.target.closest("tr");
-    const targetTabId = e.target.closest(".tab-content").id;
-    const classNameArr = tabUtils[targetTabId].classNameArr;
+    const targetTabContentId = e.target.closest(".tab-content").id;
+    const targetTabUtils = tabUtils[targetTabContentId];
+    const classNameArr = tabUtils[targetTabContentId].classNameArr;
 
     // 編輯功能
     if (e.target.classList.contains("update-btn")) {
@@ -1023,27 +803,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 刪除功能 TODO: 資料庫建好後確認 dataDelete() 有無問題
     if (e.target.classList.contains("delete-btn")) {
-      documentUtils.tableRowDelete(e, targetTabId);
+      documentUtils.tableRowDelete(e, targetTabUtils);
     }
 
-    // 儲存功能 TODO: 各頁籤功能完成後，確認 dataStore() 跟 user.js 的差別
+    // 儲存功能 TODO: 各頁籤功能完成後，確認跟 dataStoreUser() 的差別
     if (e.target.classList.contains("store-btn")) {
-      documentUtils.dataStore(targetRow, targetTabId, classNameArr);
+      documentUtils.dataStoreAdmin(
+        targetRow,
+        targetTabContentId,
+        targetTabUtils,
+        classNameArr
+      );
     }
 
     // 新增功能(表格的新增按鈕，只新增欄位)
     if (e.target.classList.contains("add-btn")) {
-      documentUtils.tableRowAdd(e, targetTabId, classNameArr);
+      documentUtils.tableRowAdd(e, targetTabUtils, classNameArr);
     }
 
     // 新增功能(表格欄位的新增按鈕，新增到資料庫) TODO: 待資料庫建好後確認使用上有無問題
     if (e.target.classList.contains("handle-add")) {
-      documentUtils.dataAdd(e, targetTabId, classNameArr);
+      documentUtils.dataAdd(
+        e,
+        targetTabContentId,
+        targetTabUtils,
+        classNameArr
+      );
     }
   });
-
-  // 讓畫面一開始就呈現出抽獎項目的內容
-  // TODO: 之後要改成用 url 來決定呈現哪個頁籤
-  const lotteryTab = document.querySelector(".tab-title#lottery");
-  lotteryTab.click();
 });

@@ -1,95 +1,10 @@
-/* 通用 func */
-const documentUtils = {
-  tableTemplate: `
-  <table>
-    <thead></thead>
-    <tbody></tbody>
-  </table>
-  `,
-
-  // 塞入表格的標題
-  getTableTitle: (newTabContent, titleArr) => {
-    const thead = newTabContent.querySelector("thead");
-    const theadRow = document.createElement("tr");
-    for (let i = 0; i < titleArr.length; i++) {
-      const tableTitle = document.createElement("th");
-      tableTitle.innerText = titleArr[i];
-      theadRow.appendChild(tableTitle);
-    }
-    thead.appendChild(theadRow);
-  },
-
-  // 塞入頁籤的內容
-  getTabContent: (targetTab, newTabContent) => {
-    if (tabUtils[targetTab].tableTitleArr) {
-      newTabContent.innerHTML = documentUtils.tableTemplate;
-      let titleArr = tabUtils[targetTab].tableTitleArr;
-      documentUtils.getTableTitle(newTabContent, titleArr);
-    }
-    tabUtils[targetTab].getContent(newTabContent);
-  },
-
-  // 編輯表格or取消編輯表格功能
-  dataUpdate: (target, action) => {
-    const originContents = target.querySelectorAll(".origin");
-    const altInput = target.querySelectorAll(".alt");
-
-    for (let i = 0; i < originContents.length; i++) {
-      if (action === "update") {
-        originContents[i].classList.add("hide");
-        altInput[i].classList.remove("hide");
-      } else if (action === "cancel") {
-        originContents[i].classList.remove("hide");
-        altInput[i].classList.add("hide");
-      }
-    }
-  },
-
-  // 儲存表格功能
-  dataStore: async (
-    target,
-    defaultData,
-    classNameArr,
-    targetUtils,
-    needArrange
-  ) => {
-    const data = defaultData || {
-      id: target.querySelector("input.id").value,
-    };
-
-    for (const className of classNameArr) {
-      data[className] = target.querySelector(`.${className} .alt__text`).value;
-    }
-
-    try {
-      await targetUtils.updateAPI(data);
-      target.innerHTML = targetUtils.template(data);
-      if (needArrange) {
-        const targetTabContent = target.closest(`.tab-content#${targetTab}`);
-        documentUtils.tableArrange(targetTabContent);
-      }
-    } catch (err) {
-      console.log(err);
-      // TODO: 確認錯誤之後要做什麼動作
-      // target.innerHTML = targetUtils.template(data);
-    }
-  },
-};
-
-function encodeHTML(str) {
-  // 對 number type 的值做 encodeHTML 會出錯
-  return str
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/&/g, "&amp;")
-    .replace(/'/g, "&#39;")
-    .replace(/"/g, "&quot;");
-}
+import { documentUtils, encodeHTML } from "../utils.js";
 
 const tabUtils = {
-  /* 會員資料的 func */ //TODO:
+  /* 會員資料的 func */
+  //TODO:
   data: {
-    adminURL: "/admin-lottery",
+    adminURL: "/user-data",
 
     getAPI: async () => {
       const response = await fetch(`${tabUtils.data.adminURL}-get`, {
@@ -132,6 +47,8 @@ const tabUtils = {
         throw err;
       }
     },
+
+    classNameArr: ["name", "address", "phone", "email"],
 
     template: (data) => {
       const htmlTemplate = `
@@ -199,9 +116,10 @@ const tabUtils = {
     },
   },
 
-  /* 訂單記錄的 func */ //TODO:
+  /* 訂單記錄的 func */
+  //TODO:
   order: {
-    adminURL: "/admin-lottery",
+    adminURL: "/user-order",
 
     getAPI: async () => {
       const response = await fetch(`${tabUtils.order.adminURL}-get`, {
@@ -272,7 +190,7 @@ const tabUtils = {
 
 document.addEventListener("DOMContentLoaded", () => {
   // 點擊 tab 頁籤改變樣式和顯示相應的內容
-  document.querySelector(".tab__area").addEventListener("click", (e) => {
+  document.querySelector(".tab__list").addEventListener("click", (e) => {
     if (e.target.classList.contains("tab-title")) {
       // 改變 tab-title 的樣式
       const tabTitle = document.querySelectorAll(".tab-title");
@@ -290,9 +208,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // 再按照選擇的頁籤動態新增 tab-content 的內容
-      const targetTab = e.target.id;
+      const targetTabContentId = e.target.id.split("-")[0];
       const targetTabContent = document.querySelector(
-        `.tab-content#${targetTab}content`
+        `.tab-content#${targetTabContentId}`
       );
       const contentArea = document.querySelector(".content__area");
       if (targetTabContent) {
@@ -301,52 +219,50 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         const newTabContent = document.createElement("div");
         newTabContent.classList.add("tab-content");
-        newTabContent.setAttribute("id", `${targetTab}content`);
+        newTabContent.setAttribute("id", `${targetTabContentId}`);
         contentArea.appendChild(newTabContent);
-        documentUtils.getTabContent(targetTab, newTabContent);
-        if (eventListenerUtils[`${targetTab}`]) {
-          eventListenerUtils[`${targetTab}`](newTabContent);
-        }
+        documentUtils.getTabContent(
+          tabUtils[targetTabContentId],
+          newTabContent
+        );
       }
     }
   });
-
   // 讓畫面一開始就呈現出會員資料的內容
-  const dataTab = document.querySelector(".tab-title#data");
+  // TODO: 之後要改成用 url 來決定呈現哪個頁籤
+  const dataTab = document.querySelector(".tab-title#data-tab");
   dataTab.click();
-});
 
-/* 各個表格的 func */
-const eventListenerUtils = {
-  /* 會員資料項目的功能 */
-  data: (tabContentArea) => {
-    tabContentArea.addEventListener("click", (e) => {
-      const targetTabContent = e.target.closest(".tab-content");
+  // 頁籤內的按鈕功能
+  document.querySelector(".content__area").addEventListener("click", (e) => {
+    const targetTabContent = e.target.closest(".tab-content");
+    const targetTabContentId = targetTabContent.id;
+    const targetTabUtils = tabUtils[targetTabContentId];
+    const classNameArr = tabUtils[targetTabContentId].classNameArr;
 
-      // 編輯功能
-      if (e.target.classList.contains("update-btn")) {
-        documentUtils.dataUpdate(targetTabContent, "update");
-      }
+    // 編輯功能
+    if (e.target.classList.contains("update-btn")) {
+      documentUtils.dataUpdate(targetTabContent, "update");
+    }
 
-      // 取消編輯功能
-      if (e.target.classList.contains("cancel-btn")) {
-        documentUtils.dataUpdate(targetTabContent, "cancel");
-      }
+    // 取消編輯功能
+    if (e.target.classList.contains("cancel-btn")) {
+      documentUtils.dataUpdate(targetTabContent, "cancel");
+    }
 
-      // 儲存功能
-      let classNameArr = ["name", "address", "phone", "email"];
-      if (e.target.classList.contains("store-btn")) {
-        // TODO: 這邊只是暫時這樣寫，以免在下面 tabUtils.data.template(data) 出錯
-        const data = { username: "user00" };
-        documentUtils.dataStore(
-          targetTabContent,
-          data,
-          classNameArr,
-          tabUtils.data,
-          false
-        );
+    // 儲存功能 TODO: 各頁籤功能完成後，確認跟 dataStoreAdmin() 的差別
+    if (e.target.classList.contains("store-btn")) {
+      // TODO: 這邊只是暫時這樣寫，以免在下面 tabUtils.data.template(data) 出錯
+      const data = { username: "user00" };
+      documentUtils.dataStoreUser(
+        targetTabContent,
+        data,
+        classNameArr,
+        targetTabUtils,
+        false
+      );
 
-        /*
+      /*
         tabUtils.data
           .updateAPI(data)
           .then(() => {
@@ -358,7 +274,6 @@ const eventListenerUtils = {
             targetTabContent.innerHTML = tabUtils.data.template(data);
           });
         */
-      }
-    });
-  },
-};
+    }
+  });
+});

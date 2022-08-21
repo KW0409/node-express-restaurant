@@ -1086,22 +1086,22 @@ tbody tr:nth-child(odd) {
   background: #e5e5e5e6;
 }
 
-#ordercontent tbody .order-num,
+.user #order tbody .order-num,
 .member-detail-wrapper tbody .order-num {
   width: 150px;
 }
 
-#ordercontent tbody .created-at,
+.user #order tbody .created-at,
 .member-detail-wrapper tbody .created-at {
   width: 180px;
 }
 
-#ordercontent tbody .price,
+.user #order tbody .price,
 .member-detail-wrapper tbody .price {
   width: 135px;
 }
 
-#ordercontent tbody .state,
+.user #order tbody .state,
 .member-detail-wrapper tbody .state {
   width: 95px;
 }
