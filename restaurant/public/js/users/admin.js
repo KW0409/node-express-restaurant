@@ -90,6 +90,7 @@ const documentUtils = {
       }
       dataObj[className] = altInputValue;
     }
+    console.log(dataObj); //TODO:
 
     const percentageList = document.querySelectorAll(".percentage .alt__text");
     if (percentageList.length) {
@@ -683,6 +684,18 @@ const tabUtils = {
       "state",
     ],
 
+    optionTemplate: (state) => {
+      if (state === "供應中") {
+        return `
+        <option selected>供應中</option>
+        <option>停售中</option>`;
+      } else {
+        return `
+        <option>供應中</option>
+        <option selected>停售中</option>`;
+      }
+    },
+
     template: (data) => {
       const template = `
         <input type="hidden" class="id" value=${data.id}></input>
@@ -730,7 +743,9 @@ const tabUtils = {
           <input class="alt__text" type="number" min="1" value=${data.price}>
         </td>
         <td class="state alt hide">
-          <input class="alt__text" type="text" value=${data.state}>
+          <select class="alt__text">
+            ${tabUtils.menu.optionTemplate(data.state)}
+          </select>
         </td>
         <td class="btn__area alt hide">
           <div class="handle__store-btn">

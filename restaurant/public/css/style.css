@@ -1154,19 +1154,19 @@ tbody .dish-price.origin {
 }
 
 #order tbody .order-num {
-  width: 220px;
+  width: 180px;
 }
 
 #order tbody .created-at {
-  width: 200px;
+  width: 345px;
 }
 
 #order tbody .orderer {
-  width: 220px;
+  width: 180px;
 }
 
 #order tbody .price {
-  width: 265px;
+  width: 200px;
 }
 
 #member tbody .name {
@@ -1245,6 +1245,22 @@ tbody td.alt textarea {
   min-width: 315px;
   max-width: 315px;
   min-height: 24px;
+}
+
+#faq tbody td.heading.alt textarea {
+  min-width: 350px;
+}
+
+#faq tbody td.content.alt textarea {
+  min-width: 650px;
+}
+
+#menu tbody td.dishname.alt textarea {
+  min-width: 250px;
+}
+
+#menu tbody td.description.alt textarea {
+  min-width: 400px;
 }
 
 tbody td.alt.image textarea {
