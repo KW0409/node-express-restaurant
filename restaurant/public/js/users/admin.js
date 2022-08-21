@@ -738,7 +738,7 @@ const tabUtils = {
   },
 };
 
-// TODO: 看 user.js 是否也要改成這樣的寫法
+// TODO: 功能都完成後再考慮能不能或要不要把這邊公同的部分再抽出去
 document.addEventListener("DOMContentLoaded", () => {
   // 點擊 tab 頁籤改變樣式和顯示相應的內容
   document.querySelector(".tab__list").addEventListener("click", (e) => {
