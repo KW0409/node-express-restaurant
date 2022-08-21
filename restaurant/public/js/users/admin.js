@@ -781,8 +781,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   // 讓畫面一開始就呈現出抽獎項目的內容
   // TODO: 之後要改成用 url 來決定呈現哪個頁籤
-  const lotteryTab = document.querySelector(".tab-title#lottery-tab");
-  lotteryTab.click();
+  const memberTab = document.querySelector(".tab-title#member-tab");
+  memberTab.click();
 
   // 頁籤內的表格按鈕功能
   document.querySelector(".content__area").addEventListener("click", (e) => {
