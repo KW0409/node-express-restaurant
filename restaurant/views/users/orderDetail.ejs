@@ -14,22 +14,31 @@
       </div>
 
       <div class="order-detail data-container">
-        <!-- TODO: 這邊之後應該要變成會傳資料進來這個頁面，資料還要用來判斷是否要呈現 btn__area -->
         <div class="title">
           <div class="heading-info">
             <div>訂單日期：<%= orderData.createdAt %></div>
             <div>訂單編號：<%= orderData.num %></div>
             <div class="order-state">訂單狀態：<%= orderData.state %></div>
           </div>
-          <% if (isAdmin) { %>
+          <!-- TODO: 確認這邊的判斷方式沒問題 -->
+          <% if (isAdmin && orderData.state !== "已完成" && orderData.state !==
+          "已取消") { %>
           <div class="btn__area">
             <div class="handle__update-btn origin">
-              <input class="btn update-btn" type="button" value="待領取" />
+              <input
+                class="btn ready-btn update-btn"
+                type="button"
+                value="可領取"
+              />
               <input class="btn cancel-btn" type="button" value="取消訂單" />
             </div>
 
-            <div class="handle__update-btn origin hide">
-              <input class="btn update-btn" type="button" value="已完成" />
+            <div class="handle__update-btn alt hide">
+              <input
+                class="btn complete-btn update-btn"
+                type="button"
+                value="完成訂單"
+              />
               <input class="btn cancel-btn" type="button" value="取消訂單" />
             </div>
           </div>
@@ -87,7 +96,7 @@
         </div>
         <div class="btn__area">
           <% if (isAdmin) { %>
-          <!-- 這邊的 href 之後可考慮改成 /admin/order-tab 之類的 -->
+          <!-- TODO: 這邊的 href 之後可考慮改成 /admin/order-tab 之類的 -->
           <input
             class="redirect-btn"
             type="button"
@@ -95,7 +104,7 @@
             onclick="location.href='/admin'"
           />
           <% } else { %>
-          <!-- 這邊的 href 之後可考慮改成 /user/order-tab 之類的 -->
+          <!-- TODO: 這邊的 href 之後可考慮改成 /user/order-tab 之類的 -->
           <input
             class="redirect-btn"
             type="button"

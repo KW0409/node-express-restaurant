@@ -1325,6 +1325,12 @@ tbody td.alt.prize textarea {
   color: #489846;
 }
 
+.order-detail .heading-info > .order-state.cancel-state {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #cb0000;
+}
+
 .order-detail.data-container .btn__area {
   display: flex;
   align-items: flex-end;
