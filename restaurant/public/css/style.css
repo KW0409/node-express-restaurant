@@ -1354,6 +1354,15 @@ tbody td.alt.prize textarea {
   width: 90px;
 }
 
+.data-container tbody .order-price-sum {
+  padding-right: 25px;
+  font-weight: bold;
+  font-size: 17px;
+  text-align: right;
+  background: #f8f8f8;
+  border-top: 2px solid #e3e1e1;
+}
+
 .bill-container > .title,
 .cart-list.data-container > .title {
   font-size: 20px;

@@ -47,15 +47,23 @@
               </tr>
             </thead>
             <tbody>
-              <% for (const item of orderData.item) { %>
-              <td class="image">
-                <img class="image" src="<%= item.image %>" />
-              </td>
-              <td class="dishname"><%= item.dishname %></td>
-              <td class="price"><%= item.price %></td>
-              <td class="count"><%= item.count %></td>
-              <td class="total-price"><%= item.totalPrice %></td>
-              <% } %>
+              <% let totalSum = 0; for (const item of orderData.item) { %>
+              <tr>
+                <td class="image">
+                  <img class="image" src="<%= item.image %>" />
+                </td>
+                <td class="dishname"><%= item.dishname %></td>
+                <td class="price"><%= item.price %></td>
+                <td class="count"><%= item.count %></td>
+                <% let priceSum = item.price * item.count %>
+                <td class="total-price">$<%= priceSum %></td>
+              </tr>
+              <% totalSum += priceSum } %>
+              <tr>
+                <td class="order-price-sum" colspan="5">
+                  總計： $<%= totalSum %>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
