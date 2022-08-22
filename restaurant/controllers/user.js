@@ -127,16 +127,63 @@ const userController = {
 
   // TODO:
   orderDetail: (req, res) => {
-    const data = {
-      // (await dataUtils.getAPI());
-      username: "user00",
-      name: "user",
-      address: "台灣台北",
-      phone: "09123456789",
-      email: "user@mail.com",
-      user_auth: 0,
+    /*
+    // id 本來就是 URL 的一部分，所以不用特地檢查
+    const { id } = req.params
+    // 如果是 /user/order-detail 就要檢查 req.session.username 是否跟 order 相同
+    // 如果是 /admin/order-detail 則不用，因為路由已經有檢查是否為 req.session.isAdmin
+    const route = req.url.split('?')[0]
+
+    try {
+      const orderData = await Orders.findOne({
+        where: {
+          id
+        },
+        include: Users
+      })
+
+      if (route === "user" && req.session.user !== orderData.user.username) {
+        console.log('articlePage-1_Error:', '查無資料！')
+        return res.send("<script>alert('Err(articlePage-1)：獲取文章失敗，請在稍後重試！')</script>")
+      }
+
+      res.render("users/orderDetail", { orderData });
+    } catch (err) {
+      console.log('articlePage-2_Error:', err.toString())
+      return res.send("<script>alert('Err(articlePage-2)：獲取資料失敗，請在稍後重試！')</script>")
+    }
+    */
+
+    const orderData = {
+      id: 1,
+      num: 123321,
+      item: [
+        {
+          image: "/css/lottery_pic/bg.png",
+          dishname: "鮮嫩洋芋白丁佐莎莎",
+          price: "$260",
+          count: 2,
+          totalPrice: "$520",
+        },
+      ],
+      bill: {
+        name: "user",
+        address: "台灣台北",
+        phone: "09123456789",
+        email: "user@mail.com",
+      },
+      state: "處理中",
+      createdAt: "2022-08-05 14:23:51",
+      user: {
+        username: "user00",
+        name: "user",
+        address: "台灣台北",
+        phone: "09123456789",
+        email: "user@mail.com",
+        user_auth: 0,
+      },
     };
-    res.render("users/orderDetail", { data });
+    res.render("users/orderDetail", { orderData });
   },
 
   // TODO:

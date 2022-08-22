@@ -702,7 +702,9 @@ const tabUtils = {
         <td class="orderer">${encodeHTML(data.user.name)}</td>
         <td class="price">NT$.${data.price}</td>
         <td class="btn__area">
-          <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/order-detail'">
+          <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/order-detail/${
+            data.id
+          }'">
         </td>`;
       // TODO: 確認上面的 onclick 超連結寫法是否正確
       return template;
