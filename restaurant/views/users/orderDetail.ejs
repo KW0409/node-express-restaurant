@@ -63,8 +63,8 @@
                 </td>
                 <td class="dishname"><%= item.dishname %></td>
                 <td class="price"><%= item.price %></td>
-                <td class="count"><%= item.count %></td>
-                <% let priceSum = item.price * item.count %>
+                <td class="amount"><%= item.amount %></td>
+                <% let priceSum = item.price * item.amount %>
                 <td class="total-price">$<%= priceSum %></td>
               </tr>
               <% totalSum += priceSum } %>

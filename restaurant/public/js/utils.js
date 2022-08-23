@@ -178,7 +178,7 @@ export const documentUtils = {
     }
   },
 
-  // 刪除表格欄位功能(只是單純刪除表格欄位，並沒有刪除資料庫的資料)
+  // 確認是否要刪除表格欄位功能(只是單純確認是否要刪除表格欄位，確認後才去呼叫刪除欄位和資料庫的資料的動作)
   tableRowDelete: (e, targetTabUtils) => {
     const targetRow = e.target.closest("tr");
     const firstCheckBtn = targetRow.querySelector(".first__check-btn");

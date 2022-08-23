@@ -162,7 +162,7 @@ const userController = {
           image: "/css/lottery_pic/bg.png",
           dishname: "鮮嫩洋芋白丁佐莎莎",
           price: 260,
-          count: 2,
+          amount: 2,
         },
       ],
       bill: {

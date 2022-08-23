@@ -1361,7 +1361,7 @@ tbody td.alt.prize textarea {
 }
 
 .data-container tbody .order-price-sum {
-  padding-right: 25px;
+  padding: 25px;
   font-weight: bold;
   font-size: 17px;
   text-align: right;
@@ -1407,7 +1407,7 @@ tbody td.alt.prize textarea {
   width: 900px;
 }
 
-.cart-list.data-container tbody .count > input {
+.cart-list.data-container tbody .amount > input {
   width: 40px;
 }
 
@@ -1419,7 +1419,7 @@ tbody td.alt.prize textarea {
   padding: 15px;
 }
 
-.cart-list.data-container tbody .btn-area > input {
+.cart-list.data-container tbody .delete-btn {
   padding: 3px 7px;
   border: 1px solid red;
   border-radius: 3px;
@@ -1427,7 +1427,7 @@ tbody td.alt.prize textarea {
   background: white;
 }
 
-.cart-list.data-container tbody .btn-area > input:hover {
+.cart-list.data-container tbody .delete-btn:hover {
   cursor: pointer;
   color: white;
   background: red;
