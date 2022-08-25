@@ -29,6 +29,7 @@ async function getMenuDataAPI() {
 }
 
 const dishCardArea = document.querySelector(".dish-card-area");
+/*
 const dishCardTemplate = `
 <div class="card-info">
   <div class="dish-photo">
@@ -38,10 +39,24 @@ const dishCardTemplate = `
     <span>#name</span> | <span>#price</span>
   </div>
 </div>
-<input class="card-btn" type="button" value="加入購物車" onclick="location.href='// TODO: 要前往的網頁連結'">`;
+<input class="card-btn" type="button" value="加入購物車" onclick="addItemToCart()">`;
+*/
+const dishCardTemplate = (imageURL, dishName, price) => {
+  return `
+<div class="card-info">
+  <div class="dish-photo">
+    <img src="${imageURL}" width="100%" height="100%">
+  </div>
+  <div class="dish-info">
+    <span class="name">${dishName}</span> | $<span class="price">${price}</span>
+  </div>
+</div>
+<input class="card-btn" type="button" value="加入購物車">`;
+};
 
 // 用來動態寫入所有的 dish cards 並產生隱形卡牌的 function
 function appendDishCard(data) {
+  /*
   for (let i = 0; i < data.length; i++) {
     const imageURL = data[i].image;
     const name = data[i].name;
@@ -54,6 +69,16 @@ function appendDishCard(data) {
       .replace("#price", price);
     dishCardArea.appendChild(dishCard);
   }
+  */
+  for (let i = 0; i < data.length; i++) {
+    const imageURL = data[i].image;
+    const dishName = data[i].name;
+    const price = data[i].price;
+    const dishCard = document.createElement("div");
+    dishCard.classList.add("container", "dish-card");
+    dishCard.innerHTML = dishCardTemplate(imageURL, dishName, price);
+    dishCardArea.appendChild(dishCard);
+  }
   // 在 dish-card-area 的最後插入兩個隱形的卡牌，讓最後一行顯示的 dish card 永遠都會是靠左排列
   const invisibleDishCard = document.createElement("div");
   invisibleDishCard.classList.add("container", "dish-card", "none");
@@ -63,8 +88,8 @@ function appendDishCard(data) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // TODO: 改成正確的 data
+async function showDishCard() {
+  // TODO: 改成正確的 fetch data
   // const data = await getMenuDataAPI;
   const data = [
     {
@@ -104,4 +129,42 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
   appendDishCard(data);
+  // TODO: 錯誤處理
+}
+
+function addItemToLocalCart(targetItem) {
+  let image = targetItem.querySelector("img").src;
+  let dishname = targetItem.querySelector(".name").innerText;
+  let price = targetItem.querySelector(".price").innerText;
+  let cartStr = localStorage.getItem("cartList");
+  let cartArr = JSON.parse(cartStr) || [];
+  if (!cartStr || cartStr.indexOf(dishname) === -1) {
+    cartArr.push({
+      image,
+      dishname,
+      price,
+      amount: 1,
+    });
+  } else {
+    cartArr.map((data) => {
+      if (data.dishname !== dishname) return data;
+      data.amount++;
+      return data;
+    });
+  }
+  localStorage.setItem("cartList", JSON.stringify(cartArr));
+}
+
+//TODO:
+function addCartNum() {}
+
+document.addEventListener("DOMContentLoaded", () => {
+  showDishCard();
+
+  dishCardArea.addEventListener("click", (e) => {
+    if (e.target.classList.contains("card-btn")) {
+      let targetItem = e.target.closest(".dish-card");
+      addItemToLocalCart(targetItem);
+    }
+  });
 });
