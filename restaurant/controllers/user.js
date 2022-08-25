@@ -113,16 +113,7 @@ const userController = {
 
   // TODO:
   memberDetail: (req, res) => {
-    const data = {
-      // (await dataUtils.getAPI());
-      username: "user00",
-      name: "user",
-      address: "台灣台北",
-      phone: "09123456789",
-      email: "user@mail.com",
-      user_auth: 0,
-    };
-    res.render("users/admin/memberDetail", { data });
+    res.render("users/admin/memberDetail");
   },
 
   // TODO:

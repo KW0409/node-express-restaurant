@@ -610,7 +610,6 @@ const tabUtils = {
     template: (data) => {
       let userState = data.user_auth ? "一般會員" : "停權會員";
       const template = `
-        <input type="hidden" class="id" value=${data.id}></input>
         <td class="name">${encodeHTML(data.name)}</td>
         <td class="username">
           <div>${encodeHTML(data.username)}</div>
@@ -622,7 +621,9 @@ const tabUtils = {
         <td class="total-spend">NT$.${data.order.totalSpend}</td>
         <td class="state">${userState}</td>
         <td class="btn__area">
-          <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/member-detail'">
+          <input class="link-btn" type="button" value="查看詳情" onclick="location.href='/admin/member-detail/${
+            data.id
+          }'">
         </td>`;
       // TODO: 確認上面的 onclick 超連結寫法是否正確
       return template;
@@ -695,7 +696,6 @@ const tabUtils = {
 
     template: (data) => {
       const template = `
-        <input type="hidden" class="id" value=${data.id}></input>
         <td class="state">${encodeHTML(data.state)}</td>
         <td class="order-num">${data.num}</td>
         <td class="created-at">${encodeHTML(data.createdAt)}</td>

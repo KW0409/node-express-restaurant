@@ -20,55 +20,11 @@
             class="redirect-btn"
             type="button"
             value="回會員列表"
-            onclick="location.href='###'"
+            onclick="location.href='/admin'"
           />
         </div>
 
-        <div class="member-data-container">
-          <div class="user-data">
-            帳號：
-            <span><%= data.username %></span>
-          </div>
-          <div class="user-data name">
-            姓名：
-            <span class="origin"><%= data.name %></span>
-          </div>
-          <div class="user-data address">
-            地址：
-            <span class="origin"><%= data.address %></span>
-          </div>
-          <div class="user-data phone">
-            電話：
-            <span class="origin"><%= data.phone %></span>
-          </div>
-          <div class="user-data email">
-            信箱：
-            <span class="origin"><%= data.email %></span>
-          </div>
-          <div class="user-data auth">
-            會員等級：
-            <span class="origin"
-              ><%= data.user_auth >= 0 ? "一般會員" : "停權會員"%></span
-            >
-            <!-- TODO: -->
-            <select class="alt hide alt__text">
-              <option selected>一般會員</option>
-              <option>停權會員</option>
-              <option>vip會員</option>
-            </select>
-          </div>
-
-          <div class="btn__area">
-            <div class="handle__update-btn origin">
-              <input class="btn update-btn" type="button" value="編輯" />
-            </div>
-
-            <div class="handle__store-btn alt hide">
-              <input class="btn store-btn" type="button" value="儲存" />
-              <input class="btn cancel-btn" type="button" value="取消" />
-            </div>
-          </div>
-        </div>
+        <div class="member-data-container"></div>
 
         <div class="order-data-container">
           <table>
@@ -88,6 +44,6 @@
     </div>
 
     <%- include('../../template/footer') %>
-    <script src="/js/users/memberDetail.js"></script>
+    <script src="/js/users/memberDetail.js" type="module"></script>
   </body>
 </html>
