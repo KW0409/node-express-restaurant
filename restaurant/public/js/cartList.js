@@ -27,27 +27,7 @@ const cartUtils = {
 
   // TODO: 確認從 localStorage 拿資料的方式是否正確
   getLocalCart: () => {
-    // TODO: 把 || 後面的東西改成 []
-    let data = JSON.parse(localStorage.getItem("cartList")) || [
-      {
-        image: "/css/lottery_pic/bg.png",
-        dishname: "鮮嫩洋芋白丁佐莎莎",
-        price: 260,
-        amount: 2,
-      },
-      {
-        image: "/css/lottery_pic/bg.png",
-        dishname: "輕盈高麗卷湘南",
-        price: 280,
-        amount: 5,
-      },
-      {
-        image: "/css/lottery_pic/bg.png",
-        dishname: "六彩雙茄起司沙拉",
-        price: 250,
-        amount: 3,
-      },
-    ];
+    let data = JSON.parse(localStorage.getItem("cartList")) || [];
     return data;
   },
 
@@ -96,9 +76,12 @@ const cartUtils = {
   },
 
   getContent: (targetArea) => {
-    //TODO:
     const tbody = targetArea.querySelector("tbody");
     const dataArr = cartUtils.getLocalCart();
+    if (dataArr.length === 0) {
+      alert("您尚未購買任何餐點，系統將為您導向點餐頁面！");
+      return (window.location = "/menu");
+    }
     let orderPriceSum = 0;
     for (let i = 0; i < dataArr.length; i++) {
       const tableRow = document.createElement("tr");
