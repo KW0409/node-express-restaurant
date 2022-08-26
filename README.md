@@ -24,31 +24,31 @@
   - **登入/註冊系統：**
     - 表單驗證功能，若輸入格式或資料不符將無法登入/註冊
       <br>
-  - **會員系統：**(開發中...)
+  - **會員系統：**
     - 查看、編輯個人資料
     - 查看目前訂單及歷史訂單的最新狀態
     - 查看訂單商品數量、金額及訂單總額
       <br>
-  - **商品系統：**(開發中...)
+  - **商品系統：**
     - 瀏覽商品、搜尋商品並點進商品頁面查看詳細資料
     - 一鍵將商品加入購物車，也可進入商品詳細頁面調整要購買的數量
-    - 若商品不在架上或數量不足，商品圖片會拉灰並顯示已售完
-    - 若商品超出庫存數量，會提示使用者商品庫存不足
+    - 若商品不在架上或數量不足，商品圖片會拉灰並顯示已售完 _(開發中...)_
+    - 若商品超出庫存數量，會提示使用者商品庫存不足 _(開發中...)_
       <br>
-  - **購物車系統：**(開發中...)
+  - **購物車系統：**
     - icon 同步顯示購物車商品數量
     - 查看、修改購物車明細
-    - 查看欲購買的項目及內容，並且成立訂單
+    - 查看欲購買的項目及內容，並且成立訂單 _(開發中...)_
       <br>
-  - **結帳系統：**(開發中...)
-    - 提供在線上付款的功能
+  - **結帳系統：**
+    - 提供在線上付款的功能 _(開發中...)_
       <br>
   - **常見問題系統：**
     - 查看常見問題列表
       <br><br>
 - 後台功能 **_（For 店家）_**
-  - **會員管理系統：**(開發中...)
-    - 查看會員列表 (含搜尋功能)
+  - **會員管理系統：**
+    - 查看會員列表 (含搜尋功能) _(搜尋功能開發中...)_
     - 查看會員詳細資料與歷史訂單
       <br>
   - **常見問題系統：**
@@ -56,11 +56,11 @@
     - 新增、修改、刪除商品常見問題及其資訊
       <br>
   - **商品管理系統：**
-    - 查看商品列表 (含搜尋功能)
+    - 查看商品列表 (含搜尋功能) _(搜尋功能開發中...)_
     - 新增、修改、刪除商品及其資訊
       <br>
-  - **訂單管理系統：**(開發中...)
-    - 查看訂單列表 (含搜尋功能)
+  - **訂單管理系統：**
+    - 查看訂單列表 (含搜尋功能) _(搜尋功能開發中...)_
     - 檢視訂單詳細資訊
     - 管理訂單狀態
       <br>
@@ -68,32 +68,63 @@
 ## 檔案架構
 
 ```
-├── config
-│   └── config.json
-├── controllers
-│   ├── carts.js
-│   ├── discounts.js
-│   ├── orders.js
-│   ├── products.js
-│   ├── transactions.js
-│   └── users.js
-├── index.js
-├── middleware
-│   └── auth.js
-├── migrations
-├── models
-│   ├── cart_item.js
-│   ├── discount.js
-│   ├── index.js
-│   ├── order.js
-│   ├── product.js
-│   ├── transaction.js
-│   └── user.js
+├── api_docs.md
 ├── node_modules
 ├── package.json
 ├── package-lock.json
 ├── README.md
-└── seeders
+└── restaurant
+  ├── config
+  │   └── config.json
+  ├── controllers
+  │   ├── lottery.js
+  │   ├── question.js
+  │   └── users.js
+  ├── ecosystem.config.js
+  ├── express.js
+  ├── migrations
+  ├── models
+  │   ├── index.js
+  │   ├── kwang_restaurant_prize_list.js
+  │   └── kwang_restaurant_user.js
+  ├── public
+  │   ├── css
+  │   │   ├── index_pic
+  │   │   ├── lottery_pic
+  │   │   ├── menu_pic
+  │   │   └── style.css
+  │   └── js
+  │       ├── cartList.js
+  │       ├── lottery.js
+  │       ├── menu.js
+  │       ├── question.js
+  │       ├── users
+  │       |   ├── admin.js
+  │       |   ├── memberDetail.js
+  │       |   ├── orderDetail.js
+  │       |   └── user.js
+  │       └── utils.js
+  ├── seeders
+  └── views
+      ├── index.ejs
+      ├── pages
+      │   ├── cartList.ejs
+      │   ├── lottery.ejs
+      │   ├── menu.ejs
+      │   └── question.ejs
+      ├── template
+      │   ├── footer.ejs
+      │   ├── header.ejs
+      │   └── navbar.ejs
+      └── users
+          ├── admin
+          |   ├── admin.ejs
+          |   └── memberDetail.ejs
+          ├── login.ejs
+          ├── orderDetail.ejs
+          ├── register.ejs
+          └── user
+              └── user.ejs
 ```
 
 ## 使用技術
@@ -109,4 +140,4 @@
 
 ## API 文件 {#API 文件}
 
-- [API 文件](./api_docs.md)
+- [API 文件](./api_docs.md) _(開發中...)_

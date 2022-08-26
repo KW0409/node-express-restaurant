@@ -1,4 +1,4 @@
-## API 文件
+## API 文件 **_(非正式文件，仍在開發中...)_**
 
 Base URL: https://kwang.tw/restaurant
 
