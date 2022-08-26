@@ -646,6 +646,45 @@ h3.error {
   height: 0px;
 }
 
+.shopping-cart {
+  border-radius: 50%;
+  width: 62px;
+  height: 62px;
+  background: #30762f;
+  box-shadow: -1.4px -1.4px 5.9px 0.1px #efefef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 250px;
+  right: 20px;
+  transition: all 0.3s;
+}
+
+.shopping-cart:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.shopping-cart > img {
+  width: 40px;
+  height: 32px;
+}
+
+.cart-item-num {
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  background: #ff667c;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  transform: translate(25%, -25%);
+}
+
 /* FAQ */
 .faq__wrapper {
   min-height: calc(100vh - 300px);
