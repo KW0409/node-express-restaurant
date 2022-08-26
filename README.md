@@ -3,7 +3,7 @@
 這是一個使用 Express + Sequelize 框架，為咬一口餐廳 Just A Bite 所打造的簡單線上點餐網站及管理後台。<br>
 使用者分為一般消費者和店家管理員，消費者可在前台網站享受流暢的訂餐體驗、管理個人資料及查看訂單紀錄，而管理員則可以在後台針對「會員」、「商品」和「訂單」三大區塊進行管理。
 
-> 網站連結：[Just A Bite](123)
+> 網站連結：[Just A Bite](http://jabrestaurant.kwang.tw/)
 
 > 使用者測試帳密：user00/user00
 >
@@ -138,6 +138,6 @@
 - Nginx
 - PM2
 
-## API 文件 {#API 文件}
+## API 文件
 
 - [API 文件](./api_docs.md) _(開發中...)_
